@@ -1,0 +1,1820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+  <title>London &amp; Scotland Trip 2026</title>
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#0a0f1e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Trip 2026">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <style>
+    :root {
+      --bg-dark: #0a0f1e;
+      --surface-dark: rgba(22, 30, 49, 0.85);
+      --surface-card: rgba(30, 41, 59, 0.7);
+      --border-dark: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(0, 212, 255, 0.35);
+      --accent-cyan: #00d4ff;
+      --accent-blue: #3b82f6;
+      --accent-indigo: #6366f1;
+      --accent-green: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-sub: #64748b;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --shadow-card: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      --safe-bottom: env(safe-area-inset-bottom, 20px);
+    }
+    body.light-mode {
+      --bg-dark: #f1f5f9;
+      --surface-dark: rgba(255, 255, 255, 0.95);
+      --surface-card: rgba(255, 255, 255, 0.92);
+      --border-dark: rgba(0, 0, 0, 0.08);
+      --border-accent: rgba(3, 105, 161, 0.3);
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-sub: #64748b;
+      --shadow-card: 0 4px 20px 0 rgba(0, 0, 0, 0.08);
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.5;
+      padding-bottom: calc(85px + var(--safe-bottom));
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .app-header {
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(10, 15, 30, 0.8) 100%);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-dark);
+      padding: 14px 20px 12px;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand-title {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(90deg, #00d4ff, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .brand-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .offline-pill {
+      font-size: 11px;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .offline-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10b981;
+    }
+    .icon-btn {
+      background: var(--surface-card);
+      border: 1px solid var(--border-dark);
+      color: var(--text-main);
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 16px 18px;
+    }
+    .card {
+      background: var(--surface-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-card);
+    }
+    .card-highlight {
+      border: 1px solid var(--border-accent);
+      background: linear-gradient(145deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-flight { background: rgba(244, 63, 94, 0.18); color: #fb7185; }
+    .badge-hotel { background: rgba(245, 158, 11, 0.18); color: #fbbf24; }
+    .badge-drive { background: rgba(99, 102, 241, 0.18); color: #a5b4fc; }
+    .badge-activity { background: rgba(16, 185, 129, 0.18); color: #34d399; }
+    .badge-city { background: rgba(0, 212, 255, 0.18); color: #38bdf8; }
+
+    /* Next Up Widget */
+    .nextup-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .nextup-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent-cyan);
+    }
+    .countdown-pill {
+      font-size: 12px;
+      font-weight: 700;
+      color: #38bdf8;
+      background: rgba(0, 212, 255, 0.1);
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+    .nextup-title {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .nextup-details {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    /* Date Simulator Selector */
+    .sim-strip {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      font-size: 12px;
+    }
+    .sim-select {
+      background: var(--bg-dark);
+      color: var(--accent-cyan);
+      border: 1px solid var(--border-dark);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      outline: none;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(10, 15, 30, 0.96);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border-dark);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0 calc(8px + var(--safe-bottom));
+      z-index: 50;
+      box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.4);
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      color: var(--text-sub);
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 20%;
+      gap: 3px;
+      transition: color 0.15s ease;
+    }
+    .nav-item.active {
+      color: var(--accent-cyan);
+    }
+    .nav-icon {
+      font-size: 20px;
+    }
+
+    /* Timeline & Day Cards */
+    .day-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    .day-num {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+    .day-date {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .day-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .btn-sm {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-dark);
+      color: var(--text-main);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-sm:hover {
+      background: rgba(0, 212, 255, 0.15);
+      color: var(--accent-cyan);
+    }
+    .event-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-dark);
+      position: relative;
+    }
+    .event-row:last-child {
+      border-bottom: none;
+    }
+    .event-time {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      min-width: 50px;
+      padding-top: 2px;
+    }
+    .event-info {
+      flex: 1;
+    }
+    .event-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .event-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+    .event-edit-btns {
+      display: flex;
+      gap: 4px;
+      opacity: 0.7;
+    }
+    .event-row:hover .event-edit-btns {
+      opacity: 1;
+    }
+    .btn-icon-sm {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 2px 4px;
+      font-size: 13px;
+    }
+    .btn-icon-sm:hover {
+      color: var(--accent-cyan);
+    }
+
+    /* Linked Ticket Chip inside Agenda */
+    .linked-ticket-chip {
+      background: rgba(0, 212, 255, 0.12);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      color: #38bdf8;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      margin-top: 4px;
+    }
+    .linked-ticket-chip:active {
+      background: rgba(0, 212, 255, 0.25);
+    }
+
+    .notes-area {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius-sm);
+      color: var(--text-main);
+      font-size: 13px;
+      padding: 10px;
+      margin-top: 10px;
+      resize: vertical;
+      min-height: 55px;
+      font-family: inherit;
+      outline: none;
+    }
+    .notes-area:focus {
+      border-color: var(--accent-cyan);
+    }
+    .btn-action {
+      background: rgba(0, 212, 255, 0.12);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      color: var(--accent-cyan);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      text-decoration: none;
+    }
+    .btn-action:active {
+      transform: scale(0.98);
+    }
+
+    /* Document Item Cards */
+    .doc-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px;
+      background: var(--surface-card);
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius-md);
+      margin-bottom: 10px;
+      gap: 12px;
+    }
+    .doc-icon {
+      font-size: 24px;
+      min-width: 32px;
+      text-align: center;
+    }
+    .doc-meta {
+      flex: 1;
+      overflow: hidden;
+    }
+    .doc-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .doc-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+    .doc-link-tag {
+      font-size: 11px;
+      color: var(--accent-cyan);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 2px;
+    }
+    .doc-btns {
+      display: flex;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+    .btn-doc {
+      background: rgba(0, 212, 255, 0.15);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      color: #38bdf8;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    /* Modals */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      display: none;
+      flex-direction: column;
+    }
+    .modal-overlay.open {
+      display: flex;
+    }
+    .modal-bar {
+      padding: 14px 16px;
+      background: #0f172a;
+      border-bottom: 1px solid var(--border-dark);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-main);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 75%;
+    }
+    .modal-close {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #ffffff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .modal-body {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #1e293b;
+      display: flex;
+      flex-direction: column;
+    }
+    .doc-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      flex: 1;
+    }
+
+    /* Dialog Form Modals */
+    .dialog-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 480px;
+      background: #0f172a;
+      border: 1px solid var(--border-accent);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      z-index: 110;
+      display: none;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+    }
+    .dialog-modal.open {
+      display: block;
+    }
+    .dialog-header {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      color: var(--accent-cyan);
+    }
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      background: #1e293b;
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      color: var(--text-main);
+      font-size: 13px;
+      outline: none;
+      font-family: inherit;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--accent-cyan);
+    }
+    .dialog-btns {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 18px;
+    }
+    .btn-primary {
+      background: var(--accent-cyan);
+      color: #0a0f1e;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    /* Checklist Section */
+    .checklist-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px;
+      border-bottom: 1px solid var(--border-dark);
+    }
+    .checklist-row:last-child {
+      border-bottom: none;
+    }
+    .checklist-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: var(--accent-cyan);
+      cursor: pointer;
+    }
+    .check-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+    .check-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Quick Guide Grids */
+    .guide-box {
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+    .guide-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .guide-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Upload Box */
+    .upload-card {
+      border: 2px dashed rgba(0, 212, 255, 0.4);
+      background: rgba(0, 212, 255, 0.04);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      text-align: center;
+      margin-top: 14px;
+      cursor: pointer;
+      display: block;
+    }
+    .upload-card input {
+      display: none;
+    }
+
+    .tab-pane {
+      display: none;
+    }
+    .tab-pane.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div>
+      <div class="brand-title">London &amp; Scotland 2026</div>
+      <div class="brand-sub">Saikat &bull; Aayushi &bull; Trisha (3y)</div>
+    </div>
+    <div class="header-actions">
+      <div class="offline-pill" id="offlineIndicator">
+        <span class="offline-dot"></span>
+        <span>Offline Ready</span>
+      </div>
+      <button class="icon-btn" onclick="toggleTheme()" title="Toggle Theme" aria-label="Toggle Theme">&#9790;</button>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- TAB 1: TODAY (Live Dashboard) -->
+    <div id="pane-today" class="tab-pane active">
+      
+      <!-- Date Simulator Bar -->
+      <div class="sim-strip">
+        <span>Trip View:</span>
+        <select id="dateSimSelect" class="sim-select" onchange="changeSimulatedDate(this.value)">
+          <option value="auto">Live Auto-Detect</option>
+          <option value="2026-09-10">Day 0: Thu, Sep 10 (Bangalore Fly)</option>
+          <option value="2026-09-11" selected>Day 1: Fri, Sep 11 (Bournemouth)</option>
+          <option value="2026-09-12">Day 2: Sat, Sep 12 (Peppa Pig World)</option>
+          <option value="2026-09-13">Day 3: Sun, Sep 13 (Fly Edinburgh)</option>
+          <option value="2026-09-14">Day 4: Mon, Sep 14 (Edinburgh Castle)</option>
+          <option value="2026-09-15">Day 5: Tue, Sep 15 (Drive Highlands)</option>
+          <option value="2026-09-16">Day 6: Wed, Sep 16 (Eilean Donan &amp; Dolphins)</option>
+          <option value="2026-09-17">Day 7: Thu, Sep 17 (Fly London)</option>
+          <option value="2026-09-18">Day 8: Fri, Sep 18 (Sky Garden &amp; River)</option>
+          <option value="2026-09-19">Day 9: Sat, Sep 19 (London &amp; Friends)</option>
+          <option value="2026-09-20">Day 10: Sun, Sep 20 (Fly Home)</option>
+        </select>
+      </div>
+
+      <!-- Live "What's Next" Card -->
+      <div class="card card-highlight">
+        <div class="nextup-header">
+          <span class="nextup-label">What's Next</span>
+          <span class="countdown-pill" id="nextEventCountdown">Upcoming</span>
+        </div>
+        <div class="nextup-title" id="nextEventTitle">Drive to Bournemouth</div>
+        <div class="nextup-details" id="nextEventDetails">Pick up rental car at Gatwick Airport and drive 100 miles via M23, M3, M27.</div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <a href="#" id="nextEventMapBtn" class="btn-action" target="_blank">&#128506; Open Maps</a>
+          <button id="nextEventDocBtn" class="btn-action" onclick="openDocFromNext()">&#128196; View Booking</button>
+        </div>
+      </div>
+
+      <!-- Current Day Events List with Quick Add/Edit -->
+      <div class="card">
+        <div class="day-card-header">
+          <div>
+            <div class="day-num" id="todayDayTitle">Day 1 Overview</div>
+            <div class="day-date" id="todayDateStr">Friday, September 11, 2026</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="badge badge-city" id="todayCityBadge">Bournemouth</span>
+            <button class="btn-sm" onclick="openAddEventModalForDate(currentSimDate)">+ Add</button>
+          </div>
+        </div>
+        <div id="todayEventsList">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+
+      <!-- Quick Hotel & Emergency Access -->
+      <div class="card">
+        <div style="font-size: 14px; font-weight: 700; margin-bottom: 10px; color: var(--accent-cyan);">&#127976; Active Accommodation &amp; Assistance</div>
+        <div style="font-size: 14px; font-weight: 600; margin-bottom: 2px;" id="activeHotelName">Bournemouth Beachfront / Lower Gardens Area</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;" id="activeHotelAddress">Bournemouth, Dorset, UK</div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px;">
+          <a href="tel:999" class="btn-action" style="justify-content: center; color: #f87171; border-color: rgba(244,63,94,0.3); background: rgba(244,63,94,0.1);">&#128222; Emergency: 999</a>
+          <a href="tel:111" class="btn-action" style="justify-content: center; color: #38bdf8;">&#129658; NHS Advice: 111</a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TAB 2: TIMELINE (All 11 Days - Fully Editable) -->
+    <div id="pane-timeline" class="tab-pane">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <div>
+          <div style="font-size: 16px; font-weight: 800;">Editable Itinerary</div>
+          <div style="font-size: 11px; color: var(--text-muted);">Tap &#9998; to edit any agenda item or + to add items</div>
+        </div>
+        <button class="btn-sm" style="color: #f87171;" onclick="confirmResetItinerary()">Reset Defaults</button>
+      </div>
+      <div id="allDaysContainer">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- TAB 3: DOCS (Tickets & Vouchers - Rename & Linkable) -->
+    <div id="pane-docs" class="tab-pane">
+      <div style="font-size: 16px; font-weight: 800; margin-bottom: 4px;">Tickets &amp; Bookings Wallet</div>
+      <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Rename and link any ticket to specific itinerary items.</div>
+
+      <div id="docsListContainer">
+        <!-- Rendered dynamically from tripDocs array -->
+      </div>
+
+      <!-- Add New Document Box -->
+      <label class="upload-card" for="docUploadInput">
+        <div style="font-size: 24px; margin-bottom: 4px;">&#10133;</div>
+        <div style="font-weight: 700; font-size: 14px; color: var(--accent-cyan);">Upload Ticket or Voucher</div>
+        <div style="font-size: 11px; color: var(--text-muted);">Pick PDF or image &bull; Rename &amp; link to itinerary</div>
+        <input type="file" id="docUploadInput" accept="application/pdf,image/*" onchange="startDocUploadFlow(this)">
+      </label>
+    </div>
+
+    <!-- TAB 4: CHECKLIST -->
+    <div id="pane-checklist" class="tab-pane">
+      <div style="font-size: 16px; font-weight: 800; margin-bottom: 4px;">Trip Preparation Checklist</div>
+      <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">Tap items to mark complete. Automatically saved offline.</div>
+
+      <div class="card" id="checklistContainer">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+
+    <!-- TAB 5: GUIDE & TIPS -->
+    <div id="pane-guide" class="tab-pane">
+      <div style="font-size: 16px; font-weight: 800; margin-bottom: 4px;">Family Travel Guide &amp; Tips</div>
+      <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">Essential UK and Scotland tips for smooth travels with a toddler.</div>
+
+      <div class="guide-box">
+        <div class="guide-title">&#128663; UK Driving Guidelines</div>
+        <div class="guide-text">
+          &bull; Drive on the left side of the road.<br>
+          &bull; At roundabouts, yield to traffic approaching from your right.<br>
+          &bull; Scottish single-track roads: Pull into "Passing Places" on your left if a car is approaching.<br>
+          &bull; UK child seat law: Children under 135 cm or 12 years must use a car seat.
+        </div>
+      </div>
+
+      <div class="guide-box">
+        <div class="guide-title">&#128652; London Public Transit with Stroller</div>
+        <div class="guide-text">
+          &bull; Children under 5 travel free on London Underground, buses, and DLR without a ticket.<br>
+          &bull; Tap in and out using your contactless credit or debit card.<br>
+          &bull; Waterloo, London Bridge, and Westminster stations offer step-free elevator access for strollers.<br>
+          &bull; Uber Boat (Thames Clipper) is fully accessible and stroller-friendly.
+        </div>
+      </div>
+
+      <div class="guide-box">
+        <div class="guide-title">&#129658; Toddler Care &amp; Packing</div>
+        <div class="guide-text">
+          &bull; Scottish weather shifts quickly: Pack waterproof rain jackets and fleece layers.<br>
+          &bull; Carry a spare change of clothes to Peppa Pig World for the outdoor splash zone.<br>
+          &bull; Boots pharmacies are present in every town and airport for pediatric essentials and milk.
+        </div>
+      </div>
+
+      <div class="guide-box">
+        <div class="guide-title">&#127915; Sky Garden Booking Window</div>
+        <div class="guide-text">
+          &bull; Free admission tickets are released 3 weeks in advance on Monday mornings.<br>
+          &bull; For your visit on Friday, Sep 18, reserve your slots on Monday, August 31, 2026.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="switchTab('today')">
+      <span class="nav-icon">&#128197;</span>
+      <span>Today</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('timeline')">
+      <span class="nav-icon">&#128337;</span>
+      <span>Timeline</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('docs')">
+      <span class="nav-icon">&#128196;</span>
+      <span>Docs</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('checklist')">
+      <span class="nav-icon">&#9745;</span>
+      <span>Tasks</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('guide')">
+      <span class="nav-icon">&#128214;</span>
+      <span>Guide</span>
+    </button>
+  </nav>
+
+  <!-- Full Screen Document Viewer Modal -->
+  <div id="docModal" class="modal-overlay">
+    <div class="modal-bar">
+      <div class="modal-title" id="modalDocTitle">Document Viewer</div>
+      <button class="modal-close" onclick="closeDocModal()">Close &#10005;</button>
+    </div>
+    <div class="modal-body" id="modalDocBody">
+      <iframe id="modalIframe" class="doc-iframe" src="about:blank"></iframe>
+    </div>
+  </div>
+
+  <!-- Modal for Editing/Adding Agenda Item -->
+  <div id="eventDialog" class="dialog-modal">
+    <div class="dialog-header" id="eventDialogHeader">Edit Agenda Item</div>
+    <input type="hidden" id="eventDayIndex">
+    <input type="hidden" id="eventItemIndex">
+
+    <div class="form-group">
+      <label class="form-label">Time / Schedule</label>
+      <input type="text" id="eventTimeInput" class="form-input" placeholder="e.g. 10:00 or 14:00 - 15:30">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Activity Title</label>
+      <input type="text" id="eventTitleInput" class="form-input" placeholder="e.g. Visit Edinburgh Castle">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Description &amp; Details</label>
+      <textarea id="eventDescInput" class="form-textarea" rows="3" placeholder="Add notes, addresses, tips..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Link Ticket / Booking Document</label>
+      <select id="eventDocSelect" class="form-select">
+        <option value="">-- No Linked Document --</option>
+      </select>
+    </div>
+
+    <div class="dialog-btns">
+      <button type="button" class="btn-secondary" onclick="closeEventDialog()">Cancel</button>
+      <button type="button" class="btn-primary" onclick="saveEventDialog()">Save Agenda</button>
+    </div>
+  </div>
+
+  <!-- Modal for Uploading / Renaming & Linking Document -->
+  <div id="docDialog" class="dialog-modal">
+    <div class="dialog-header" id="docDialogHeader">Ticket Details &amp; Link</div>
+    <input type="hidden" id="docEditId">
+    <input type="hidden" id="docPendingData">
+    <input type="hidden" id="docPendingType">
+
+    <div class="form-group">
+      <label class="form-label">Document Name</label>
+      <input type="text" id="docNameInput" class="form-input" placeholder="e.g. Edinburgh Castle Tickets">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Link to Itinerary Item</label>
+      <select id="docLinkSelect" class="form-select">
+        <option value="">-- Do Not Link (Wallet Only) --</option>
+      </select>
+    </div>
+
+    <div class="dialog-btns">
+      <button type="button" class="btn-secondary" onclick="closeDocDialog()">Cancel</button>
+      <button type="button" class="btn-primary" onclick="saveDocDialog()">Save Ticket</button>
+    </div>
+  </div>
+
+  <script>
+    // Initial Default Data Source
+    const DEFAULT_TRIP_DAYS = [
+      {
+        date: "2026-09-10",
+        dayNum: "Day 0",
+        dateStr: "Thursday, September 10, 2026",
+        city: "Bangalore",
+        badge: "badge-flight",
+        summary: "Departure from Kempegowda International Airport (BLR)",
+        hotel: "In Transit",
+        hotelAddress: "Emirates Flight EK 567",
+        events: [
+          { id: "ev_0_1", time: "18:00", title: "Arrive at Bangalore Airport (BLR)", desc: "Bag drop and border clearance at Terminal 2.", docId: "doc_emirates" },
+          { id: "ev_0_2", time: "21:00", title: "Flight EK 567 Departs", desc: "Fly to Dubai (DXB). 3h 50m flight time.", docId: "doc_emirates" },
+          { id: "ev_0_3", time: "23:20", title: "Transit at Dubai (DXB) Terminal 3", desc: "Short layover (3h 25m) before connection to London.", docId: "doc_emirates" }
+        ]
+      },
+      {
+        date: "2026-09-11",
+        dayNum: "Day 1",
+        dateStr: "Friday, September 11, 2026",
+        city: "Bournemouth",
+        badge: "badge-drive",
+        summary: "Landing at London Gatwick, drive to Bournemouth, and seaside stroll",
+        hotel: "Bournemouth Highcliff Marriott Hotel",
+        hotelAddress: "105 St. Michael's Road, Bournemouth, BH2 5DU (t: +44 1202 557702)",
+        events: [
+          { id: "ev_1_1", time: "07:20", title: "Flight EK 11 Lands at Gatwick (LGW)", desc: "Terminal N. Clear border control and retrieve checked bags.", docId: "doc_emirates" },
+          { id: "ev_1_2", time: "09:00", title: "Collect Rental Car & Drive to Bournemouth", desc: "100 miles via M23, M3, M27, A31. Optional stop at Winchester Services." },
+          { id: "ev_1_3", time: "12:00", title: "Hotel Luggage Drop & Lunch", desc: "Check in / drop bags at Bournemouth Highcliff Marriott (Ref: 5318742616), enjoy seaside lunch, and rest.", docId: "doc_hotel_bournemouth" },
+          { id: "ev_1_4", time: "16:30", title: "Bournemouth Lower Gardens & Pier Promenade", desc: "Level, paved walk through gardens down to the pier. Ride the land train and visit the Oceanarium." },
+          { id: "ev_1_5", time: "19:00", title: "Early Seaside Dinner", desc: "Casual dining near Pier Approach." }
+        ]
+      },
+      {
+        date: "2026-09-12",
+        dayNum: "Day 2",
+        dateStr: "Saturday, September 12, 2026",
+        city: "Bournemouth & New Forest",
+        badge: "badge-activity",
+        summary: "Peppa Pig World at Paultons Park and wild ponies in the New Forest",
+        hotel: "Bournemouth Highcliff Marriott Hotel",
+        hotelAddress: "105 St. Michael's Road, Bournemouth, BH2 5DU (t: +44 1202 557702)",
+        events: [
+          { id: "ev_2_1", time: "09:15", title: "Drive to Paultons Park (Ower)", desc: "35 minutes along A31 for 10:00 gate opening." },
+          { id: "ev_2_2", time: "10:00", title: "Peppa Pig World (Confirmed Entry)", desc: "Ride Peppa's Big Balloon Ride, George's Dinosaur Adventure, and splash park (Ref: 642608160028).", docId: "doc_peppa_pig" },
+          { id: "ev_2_3", time: "15:00", title: "New Forest Ponies in Lyndhurst / Burley", desc: "See wild ponies and donkeys on village greens. Afternoon tea or ice cream." },
+          { id: "ev_2_4", time: "17:30", title: "Return to Bournemouth", desc: "30-minute drive back for dinner and restful evening." }
+        ]
+      },
+      {
+        date: "2026-09-13",
+        dayNum: "Day 3",
+        dateStr: "Sunday, September 13, 2026",
+        city: "Edinburgh",
+        badge: "badge-flight",
+        summary: "Flight from Southampton to Edinburgh and Georgian Home check-in",
+        hotel: "Georgian Home Airbnb (Hosted by David)",
+        hotelAddress: "16 N St Andrew St, Edinburgh EH2 1HJ (t: +44 7730 530158)",
+        events: [
+          { id: "ev_3_1", time: "10:00", title: "Hotel Checkout & Coastal Brunch", desc: "Breakfast at Marriott and coastal drive past Sandbanks." },
+          { id: "ev_3_2", time: "12:30", title: "Drive to Southampton Airport (SOU)", desc: "40 minutes. Return rental car directly outside terminal." },
+          { id: "ev_3_3", time: "15:00", title: "Flight BA 4106 to Edinburgh (EDI)", desc: "Loganair / British Airways flight. 1h 45m duration.", docId: "doc_ba_sou_edi" },
+          { id: "ev_3_4", time: "16:45", title: "Land at Edinburgh & Check-in at St Andrew St Airbnb", desc: "Take tram directly to St Andrew Square. Check-in after 16:00 (Code: HMHYPY2WBA).", docId: "doc_hotel_edinburgh" },
+          { id: "ev_3_5", time: "18:30", title: "Princes Street Gardens & Dinner", desc: "Evening walk beneath illuminated castle and dinner on George Street." }
+        ]
+      },
+      {
+        date: "2026-09-14",
+        dayNum: "Day 4",
+        dateStr: "Monday, September 14, 2026",
+        city: "Edinburgh",
+        badge: "badge-activity",
+        summary: "Edinburgh Castle (12:00 PM), Dean Village, and Calton Hill views",
+        hotel: "Georgian Home Airbnb (Hosted by David)",
+        hotelAddress: "16 N St Andrew St, Edinburgh EH2 1HJ (t: +44 7730 530158)",
+        events: [
+          { id: "ev_4_1", time: "09:00", title: "Royal Mile & Victoria Street", desc: "Breakfast and photos along colorful Victoria Street. Playground at Princes Street Gardens." },
+          { id: "ev_4_2", time: "11:45", title: "Edinburgh Castle (Confirmed Entry: 12:00)", desc: "Crown Jewels, Great Hall, and the One O'Clock Gun fired at 13:00." },
+          { id: "ev_4_3", time: "13:30", title: "Grassmarket Lunch & Gelato", desc: "Lunch and gelato at Mary's Milk Bar." },
+          { id: "ev_4_4", time: "15:00", title: "Dean Village Riverside Walk", desc: "Peaceful walk along the Water of Leith through 19th-century milling village." },
+          { id: "ev_4_5", time: "17:00", title: "Calton Hill Sunset Views", desc: "Paved walk to National Monument with open views over city and Firth of Forth." },
+          { id: "ev_4_6", time: "19:00", title: "Dinner & Pack Bags", desc: "Dinner in New Town (Dishoom or Contini) and pack for Highlands road trip." }
+        ]
+      },
+      {
+        date: "2026-09-15",
+        dayNum: "Day 5",
+        dateStr: "Tuesday, September 15, 2026",
+        city: "Highlands (Letterfinlay)",
+        badge: "badge-drive",
+        summary: "Doune Castle, Rannoch Moor, and Glencoe valley drive to Loch Lochy",
+        hotel: "The Whispering Pine Lodge",
+        hotelAddress: "Loch Lochy, Spean Bridge, Letterfinlay, PH34 4DZ",
+        events: [
+          { id: "ev_5_1", time: "10:00", title: "Collect Rental SUV at Edinburgh Airport (Arnold Clark)", desc: "Tram or taxi from hotel to airport. Shuttle from Coach Park Stop 8 to branch. Automatic SUV with toddler seat (Ref: 10851829). Head northwest on M9 towards Doune.", docId: "doc_arnold_clark" },
+          { id: "ev_5_2", time: "10:50", title: "Doune Castle Stop", desc: "Explore 14th-century fortress and River Teith trail (45 mins)." },
+          { id: "ev_5_3", time: "11:45", title: "Callander & Loch Lubnaig", desc: "Coffee stop in Callander and lakeside pause at Loch Lubnaig." },
+          { id: "ev_5_4", time: "13:30", title: "Glencoe Valley & Three Sisters", desc: "Pass Rannoch Moor. Viewpoint photos, lunch at visitor center, and turf house visit." },
+          { id: "ev_5_5", time: "16:00", title: "Check-in at The Whispering Pine Lodge", desc: "Arrive at hotel on Loch Lochy. Lochside dinner at lodge restaurant.", docId: "doc_whispering_pine" }
+        ]
+      },
+      {
+        date: "2026-09-16",
+        dayNum: "Day 6",
+        dateStr: "Wednesday, September 16, 2026",
+        city: "Highlands & Inverness",
+        badge: "badge-activity",
+        summary: "Glen Shiel, Eilean Donan Castle, and Moray Firth wild dolphin boat tour",
+        hotel: "The Whispering Pine Lodge",
+        hotelAddress: "Loch Lochy, Spean Bridge, Letterfinlay, PH34 4DZ",
+        events: [
+          { id: "ev_6_1", time: "09:15", title: "Scenic Glen Shiel Drive (A87)", desc: "Pass beneath Five Sisters of Kintail mountain peaks." },
+          { id: "ev_6_2", time: "10:15", title: "Eilean Donan Castle", desc: "Cross arched stone bridge to explore the lochside castle." },
+          { id: "ev_6_3", time: "11:30", title: "Drive to Inverness Marina", desc: "80 minutes northeast along A87 and A82. Lunch at marina cafe." },
+          { id: "ev_6_4", time: "14:00", title: "Dolphin Spirit Wildlife Cruise", desc: "75-minute cruise into sheltered Moray Firth to spot resident bottlenose dolphins." },
+          { id: "ev_6_5", time: "15:45", title: "Scenic Return Drive via Loch Ness", desc: "Follow Loch Ness past Urquhart Castle and Fort Augustus back to the lodge." }
+        ]
+      },
+      {
+        date: "2026-09-17",
+        dayNum: "Day 7",
+        dateStr: "Thursday, September 17, 2026",
+        city: "London (Waterloo)",
+        badge: "badge-flight",
+        summary: "Scenic Cairngorms drive, flight to London City Airport, and Waterloo hotel",
+        hotel: "Park Plaza County Hall Hotel",
+        hotelAddress: "1 Addington Street, Waterloo, London, SE1 7RY",
+        events: [
+          { id: "ev_7_1", time: "10:00", title: "Lodge Checkout & Cairngorms Drive", desc: "Drive east on A86 past Loch Laggan, joining A9 south." },
+          { id: "ev_7_2", time: "12:30", title: "Lunch Stop: Blair Castle or House of Bruar", desc: "Baronial castle gardens and play area, or food hall lunch." },
+          { id: "ev_7_3", time: "17:30", title: "Return Rental SUV at Arnold Clark (Edinburgh Airport)", desc: "Return car at Eastfield Road branch by 18:00. Take 3-minute shuttle to terminal for flight BA 8719.", docId: "doc_arnold_clark" },
+          { id: "ev_7_4", time: "20:10", title: "Flight BA 8719: EDI to London City (LCY)", desc: "Evening flight landing in London at 21:35.", docId: "doc_ba_edi_lcy" },
+          { id: "ev_7_5", time: "22:00", title: "Taxi to Park Plaza County Hall, Waterloo", desc: "Check in at 24-hour reception and rest.", docId: "doc_park_plaza" }
+        ]
+      },
+      {
+        date: "2026-09-18",
+        dayNum: "Day 8",
+        dateStr: "Friday, September 18, 2026",
+        city: "London",
+        badge: "badge-activity",
+        summary: "Big Ben, Uber Boat along Thames, Sky Garden, and London Eye night lights",
+        hotel: "Park Plaza County Hall Hotel",
+        hotelAddress: "1 Addington Street, Waterloo, London, SE1 7RY",
+        events: [
+          { id: "ev_8_1", time: "09:30", title: "Westminster Bridge & Big Ben", desc: "Walk across bridge outside hotel to view Big Ben and Parliament." },
+          { id: "ev_8_2", time: "11:15", title: "Uber Boat River Cruise to Tower Pier", desc: "Board Thames Clipper catamaran from Westminster Pier to Tower Pier." },
+          { id: "ev_8_3", time: "12:15", title: "Tower Bridge & Lunch", desc: "Walk beside Tower Bridge and dine near St Katharine Docks." },
+          { id: "ev_8_4", time: "14:15", title: "Sky Garden Visit", desc: "35th-floor observation level with indoor gardens and city vistas." },
+          { id: "ev_8_5", time: "16:30", title: "Rest & Jubilee Gardens Playground", desc: "Play area next to the London Eye right outside hotel." },
+          { id: "ev_8_6", time: "18:30", title: "London Eye Evening Flight & South Bank Stroll", desc: "Night lights flight on the London Eye and riverfront dinner." }
+        ]
+      },
+      {
+        date: "2026-09-19",
+        dayNum: "Day 9",
+        dateStr: "Saturday, September 19, 2026",
+        city: "London",
+        badge: "badge-activity",
+        summary: "Buckingham Palace, St James's Park pelicans, and evening with friends",
+        hotel: "Park Plaza County Hall Hotel",
+        hotelAddress: "1 Addington Street, Waterloo, London, SE1 7RY",
+        events: [
+          { id: "ev_9_1", time: "09:30", title: "Buckingham Palace & St James's Park", desc: "Stroll royal parks to see palace gates, pelicans, and ducks." },
+          { id: "ev_9_2", time: "12:30", title: "Covent Garden & Transport Museum", desc: "Pedestrian piazza with street performers and historic vehicles." },
+          { id: "ev_9_3", time: "16:00", title: "Hotel Rest & Refresh", desc: "Quiet break before evening social gathering." },
+          { id: "ev_9_4", time: "18:00", title: "Catch-up with Friends for Dinner", desc: "Dinner and drinks with friends in central London." }
+        ]
+      },
+      {
+        date: "2026-09-20",
+        dayNum: "Day 10",
+        dateStr: "Sunday, September 20, 2026",
+        city: "Gatwick Departure",
+        badge: "badge-flight",
+        summary: "Hotel checkout, transfer to Gatwick Terminal N, and Emirates flight home",
+        hotel: "In Transit",
+        hotelAddress: "Flight EK 16 to Dubai & Bangalore",
+        events: [
+          { id: "ev_10_1", time: "08:30", title: "Breakfast & Hotel Checkout", desc: "Breakfast at Park Plaza County Hall and pack bags." },
+          { id: "ev_10_2", time: "10:30", title: "Transfer to Gatwick Airport (LGW) Terminal N", desc: "Direct taxi (75m) or Thameslink train from London Bridge (30m)." },
+          { id: "ev_10_3", time: "11:45", title: "Emirates Bag Drop & Security", desc: "Drop luggage at Terminal N for flight EK 16.", docId: "doc_emirates" },
+          { id: "ev_10_4", time: "14:35", title: "Flight EK 16 Departs to Dubai", desc: "7h 10m flight. Arrives Dubai 00:45 Monday, Sep 21.", docId: "doc_emirates" },
+          { id: "ev_10_5", time: "Mon 08:50", title: "Arrive Bangalore (BLR)", desc: "Connection on EK 564 landing in Bangalore at 08:50 AM.", docId: "doc_emirates" }
+        ]
+      }
+    ];
+
+    const DEFAULT_TRIP_DOCS = [
+      {
+        id: "doc_emirates",
+        name: "Emirates International Flights",
+        sub: "BLR &rarr; DXB &rarr; LGW &amp; Return &bull; PNR: BFIDC6",
+        url: "./docs/emirates-international-flights.pdf",
+        icon: "&#9992;",
+        linkedEventId: "ev_0_2",
+        isBuiltIn: true
+      },
+      {
+        id: "doc_ba_sou_edi",
+        name: "BA Flight: Southampton to Edinburgh",
+        sub: "Flight BA 4106 (Sep 13) &bull; PNR: ZPOPRH",
+        url: "./docs/ba-flight-southampton-edinburgh.pdf",
+        icon: "&#9992;",
+        linkedEventId: "ev_3_3",
+        isBuiltIn: true
+      },
+      {
+        id: "doc_ba_edi_lcy",
+        name: "BA Flight: Edinburgh to London City",
+        sub: "Flight BA 8719 (Sep 17) &bull; PNR: XERQPB",
+        url: "./docs/ba-flight-edinburgh-london-city.pdf",
+        icon: "&#9992;",
+        linkedEventId: "ev_7_4",
+        isBuiltIn: true
+      },
+      {
+        id: "doc_whispering_pine",
+        name: "The Whispering Pine Lodge Voucher",
+        sub: "Loch Lochy, Highlands (Sep 15&ndash;17) &bull; Agoda: 2043764635",
+        url: "./docs/hotel-highlands-whispering-pine.pdf",
+        icon: "&#127976;",
+        linkedEventId: "ev_5_5",
+        isBuiltIn: true
+      },
+      {
+        id: "doc_park_plaza",
+        name: "Park Plaza County Hall London",
+        sub: "Waterloo, London (Sep 17&ndash;20) &bull; Agoda: 2044656117",
+        url: "./docs/hotel-london-park-plaza.pdf",
+        icon: "&#127976;",
+        linkedEventId: "ev_7_5",
+        isBuiltIn: true
+      },
+      {
+        id: "doc_arnold_clark",
+        name: "Arnold Clark Car Rental (Scotland)",
+        sub: "Automatic SUV &bull; Ref: 10851829 &bull; Edinburgh Airport Pickup/Dropoff",
+        url: "./docs/car-rental-scotland-arnold-clark.pdf",
+        icon: "&#128663;",
+        linkedEventId: "ev_5_1",
+        isBuiltIn: true
+      },
+      {
+        id: "doc_hotel_bournemouth",
+        name: "Bournemouth Highcliff Marriott Hotel",
+        sub: "Sea View Room &bull; Sep 11–13 &bull; Agoda: 2041628617 / Booking: 5318742616",
+        url: "./docs/hotel-bournemouth-highcliff-marriott.pdf",
+        icon: "&#127976;",
+        linkedEventId: "ev_1_3",
+        isBuiltIn: true
+      },
+      {
+        id: "doc_peppa_pig",
+        name: "Peppa Pig World & Paultons Park",
+        sub: "Family of 3 &bull; Valid: Sep 12, 2026 &bull; Booking: 642608160028",
+        url: "./docs/tickets-paultons-peppa-pig-world.pdf",
+        icon: "&#127915;",
+        linkedEventId: "ev_2_2",
+        isBuiltIn: true
+      },
+      {
+        id: "doc_hotel_edinburgh",
+        name: "Georgian Home Airbnb (Edinburgh)",
+        sub: "16 N St Andrew St &bull; Sep 13–15 &bull; Code: HMHYPY2WBA (Host: David)",
+        url: "./docs/hotel-edinburgh-airbnb-georgian-home.pdf",
+        icon: "&#127968;",
+        linkedEventId: "ev_3_4",
+        isBuiltIn: true
+      }
+    ];
+
+    const CHECKLIST_ITEMS = [
+      { id: "c1", title: "Book Rental Car 1 (England)", desc: "Pickup Gatwick (Sep 11, 09:00), dropoff Southampton (Sep 13, 13:00). Child seat included." },
+      { id: "c2", title: "Book Rental Car 2 (Scotland)", desc: "Confirmed: Arnold Clark SUV Automatic (Ref: 10851829) with toddler seat." },
+      { id: "c3", title: "Reserve Bournemouth Hotel", desc: "Confirmed: Bournemouth Highcliff Marriott Hotel (Agoda 2041628617 / Booking: 5318742616)." },
+      { id: "c4", title: "Finalize Edinburgh Hotel", desc: "Confirmed: Georgian Home Airbnb at 16 N St Andrew St (Code: HMHYPY2WBA)." },
+      { id: "c5", title: "Book Peppa Pig World Tickets", desc: "Confirmed: Family of 3 admission for Saturday, Sep 12 (Ref: 642608160028)." },
+      { id: "c6", title: "Book Dolphin Spirit Inverness Cruise", desc: "Reserve 14:00 cruise at dolphinspirit.co.uk for Wednesday, Sep 16." },
+      { id: "c7", title: "Reserve Sky Garden Free Passes", desc: "Book 3 weeks in advance on Monday morning (August 31) for 14:15 slot on Sep 18." },
+      { id: "c8", title: "Book London Eye Night Tickets", desc: "Book timed sunset/evening tickets for Friday, Sep 18 (18:30)." }
+    ];
+
+    // State Variables
+    let tripDays = [];
+    let tripDocs = [];
+    let currentSimDate = "2026-09-11";
+
+    // Initialize Data from Storage or Defaults
+    function loadState() {
+      const savedDays = localStorage.getItem('trip_days_custom');
+      if (savedDays) {
+        try { tripDays = JSON.parse(savedDays); } catch (e) { tripDays = JSON.parse(JSON.stringify(DEFAULT_TRIP_DAYS)); }
+      } else {
+        tripDays = JSON.parse(JSON.stringify(DEFAULT_TRIP_DAYS));
+      }
+
+      // Sync hotel names and docIds into tripDays
+      for (let day of tripDays) {
+        if (day.date === "2026-09-11" || day.date === "2026-09-12") {
+          day.hotel = "Bournemouth Highcliff Marriott Hotel";
+          day.hotelAddress = "105 St. Michael's Road, Bournemouth, BH2 5DU (t: +44 1202 557702)";
+        }
+        if (day.date === "2026-09-13" || day.date === "2026-09-14") {
+          day.hotel = "Georgian Home Airbnb (Hosted by David)";
+          day.hotelAddress = "16 N St Andrew St, Edinburgh EH2 1HJ (t: +44 7730 530158)";
+        }
+        for (let ev of day.events) {
+          if (ev.id === "ev_1_3") ev.docId = "doc_hotel_bournemouth";
+          if (ev.id === "ev_2_2") ev.docId = "doc_peppa_pig";
+          if (ev.id === "ev_3_4") ev.docId = "doc_hotel_edinburgh";
+          if (ev.id === "ev_5_1" && (!ev.docId || ev.title.includes("Waverley"))) {
+            ev.time = "10:00";
+            ev.title = "Collect Rental SUV at Edinburgh Airport (Arnold Clark)";
+            ev.desc = "Tram or taxi to airport. Shuttle from Coach Park Stop 8 to branch. Automatic SUV with toddler seat (Ref: 10851829). Head northwest on M9 towards Doune.";
+            ev.docId = "doc_arnold_clark";
+          }
+          if (ev.id === "ev_7_3" && (!ev.docId || !ev.title.includes("Arnold Clark"))) {
+            ev.time = "17:30";
+            ev.title = "Return Rental SUV at Arnold Clark (Edinburgh Airport)";
+            ev.desc = "Return car at Eastfield Road branch by 18:00. Take 3-minute shuttle to terminal for flight BA 8719.";
+            ev.docId = "doc_arnold_clark";
+          }
+        }
+      }
+
+      const savedDocs = localStorage.getItem('trip_docs_custom');
+      if (savedDocs) {
+        try { tripDocs = JSON.parse(savedDocs); } catch (e) { tripDocs = JSON.parse(JSON.stringify(DEFAULT_TRIP_DOCS)); }
+      } else {
+        tripDocs = JSON.parse(JSON.stringify(DEFAULT_TRIP_DOCS));
+      }
+
+      // Ensure all built-in docs are present in tripDocs
+      DEFAULT_TRIP_DOCS.forEach(defDoc => {
+        if (!tripDocs.some(d => d.id === defDoc.id)) {
+          tripDocs.push(JSON.parse(JSON.stringify(defDoc)));
+        }
+      });
+
+      // Mark confirmed checklist items as completed
+      localStorage.setItem('check_c2', 'true');
+      localStorage.setItem('check_c3', 'true');
+      localStorage.setItem('check_c4', 'true');
+      localStorage.setItem('check_c5', 'true');
+    }
+
+    function saveState() {
+      localStorage.setItem('trip_days_custom', JSON.stringify(tripDays));
+      localStorage.setItem('trip_docs_custom', JSON.stringify(tripDocs));
+    }
+
+    function initApp() {
+      loadState();
+      renderTodayView(currentSimDate);
+      renderTimeline();
+      renderDocsList();
+      renderChecklist();
+
+      // Register Service Worker if on HTTP/HTTPS
+      if ('serviceWorker' in navigator && (window.location.protocol.startsWith('http') || window.location.protocol.startsWith('https'))) {
+        navigator.serviceWorker.register('./sw.js').then(() => {
+          document.getElementById('offlineIndicator').innerHTML = '<span class="offline-dot"></span><span>Offline Ready</span>';
+        }).catch(() => {});
+      }
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+
+      const targetPane = document.getElementById('pane-' + tabId);
+      if (targetPane) targetPane.classList.add('active');
+
+      const tabs = ['today', 'timeline', 'docs', 'checklist', 'guide'];
+      const idx = tabs.indexOf(tabId);
+      if (idx !== -1) {
+        document.querySelectorAll('.nav-item')[idx].classList.add('active');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function changeSimulatedDate(dateVal) {
+      if (dateVal === 'auto') {
+        const today = new Date().toISOString().split('T')[0];
+        const match = tripDays.find(d => d.date === today);
+        currentSimDate = match ? match.date : "2026-09-11";
+      } else {
+        currentSimDate = dateVal;
+      }
+      renderTodayView(currentSimDate);
+    }
+
+    function getDocById(docId) {
+      return tripDocs.find(d => d.id === docId);
+    }
+
+    function getEventById(eventId) {
+      for (let day of tripDays) {
+        for (let ev of day.events) {
+          if (ev.id === eventId) return { event: ev, day: day };
+        }
+      }
+      return null;
+    }
+
+    function renderTodayView(targetDate) {
+      const dayData = tripDays.find(d => d.date === targetDate) || tripDays[1];
+
+      document.getElementById('todayDayTitle').textContent = dayData.dayNum + ": " + dayData.city;
+      document.getElementById('todayDateStr').textContent = dayData.dateStr;
+      document.getElementById('todayCityBadge').textContent = dayData.city;
+      document.getElementById('todayCityBadge').className = "badge " + dayData.badge;
+      document.getElementById('activeHotelName').textContent = dayData.hotel;
+      document.getElementById('activeHotelAddress').textContent = dayData.hotelAddress;
+
+      // Next Up Event
+      if (dayData.events.length > 0) {
+        const nextEvt = dayData.events[0];
+        document.getElementById('nextEventTitle').textContent = nextEvt.title;
+        document.getElementById('nextEventDetails').textContent = nextEvt.desc;
+        document.getElementById('nextEventCountdown').textContent = nextEvt.time;
+
+        const nextDocBtn = document.getElementById('nextEventDocBtn');
+        const linkedDoc = nextEvt.docId ? getDocById(nextEvt.docId) : null;
+        if (linkedDoc) {
+          nextDocBtn.style.display = 'inline-flex';
+          nextDocBtn.setAttribute('data-doc', linkedDoc.url);
+          nextDocBtn.setAttribute('data-title', linkedDoc.name);
+          nextDocBtn.textContent = '📎 ' + linkedDoc.name;
+        } else {
+          nextDocBtn.style.display = 'none';
+        }
+      } else {
+        document.getElementById('nextEventTitle').textContent = 'Free Day / No Scheduled Activities';
+        document.getElementById('nextEventDetails').textContent = 'Relax or tap "+ Add" above to plan a new activity.';
+        document.getElementById('nextEventCountdown').textContent = 'Relax';
+        document.getElementById('nextEventDocBtn').style.display = 'none';
+      }
+
+      const mapQuery = encodeURIComponent(dayData.city + " " + dayData.hotelAddress);
+      document.getElementById('nextEventMapBtn').href = "https://maps.google.com/?q=" + mapQuery;
+
+      // Events list
+      const container = document.getElementById('todayEventsList');
+      if (dayData.events.length === 0) {
+        container.innerHTML = '<div style="padding: 12px 0; color: var(--text-muted); font-size: 13px;">No activities planned yet. Tap "+ Add" above to add one!</div>';
+        return;
+      }
+
+      const dayIdx = tripDays.indexOf(dayData);
+      container.innerHTML = dayData.events.map((ev, evIdx) => {
+        const doc = ev.docId ? getDocById(ev.docId) : null;
+        return `
+          <div class="event-row">
+            <div class="event-time">${ev.time}</div>
+            <div class="event-info">
+              <div class="event-title">
+                <span>${ev.title}</span>
+              </div>
+              <div class="event-desc">${ev.desc}</div>
+              ${doc ? `
+                <div style="margin-top: 4px;">
+                  <button class="linked-ticket-chip" onclick="viewDoc('${doc.url}', '${doc.name}')">&#128206; ${doc.name}</button>
+                </div>
+              ` : ''}
+            </div>
+            <div class="event-edit-btns">
+              <button class="btn-icon-sm" onclick="openEditEventModal(${dayIdx}, ${evIdx})" title="Edit">&#9998;</button>
+              <button class="btn-icon-sm" onclick="deleteEvent(${dayIdx}, ${evIdx})" title="Delete" style="color: #f87171;">&#10005;</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openDocFromNext() {
+      const btn = document.getElementById('nextEventDocBtn');
+      const docPath = btn.getAttribute('data-doc');
+      const docTitle = btn.getAttribute('data-title');
+      if (docPath) {
+        viewDoc(docPath, docTitle || 'Booking Document');
+      }
+    }
+
+    function renderTimeline() {
+      const container = document.getElementById('allDaysContainer');
+      container.innerHTML = tripDays.map((day, dayIdx) => {
+        const savedNote = localStorage.getItem('trip_note_' + day.date) || '';
+        return `
+          <div class="card" id="card-${day.date}">
+            <div class="day-card-header">
+              <div>
+                <div class="day-num">${day.dayNum}: ${day.city}</div>
+                <div class="day-date">${day.dateStr}</div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span class="badge ${day.badge}">${day.city}</span>
+                <button class="btn-sm" onclick="openAddEventModal(${dayIdx})">+ Add</button>
+              </div>
+            </div>
+            <div style="font-size: 13px; font-weight: 600; color: #38bdf8; margin-bottom: 10px;">${day.summary}</div>
+            
+            <div style="border-top: 1px solid var(--border-dark); padding-top: 6px;">
+              ${day.events.length === 0 ? '<div style="font-size: 12px; color: var(--text-muted); padding: 8px 0;">No activities yet. Tap "+ Add" to add to this day.</div>' : ''}
+              ${day.events.map((ev, evIdx) => {
+                const doc = ev.docId ? getDocById(ev.docId) : null;
+                return `
+                  <div class="event-row">
+                    <div class="event-time">${ev.time}</div>
+                    <div class="event-info">
+                      <div class="event-title">
+                        <span>${ev.title}</span>
+                      </div>
+                      <div class="event-desc">${ev.desc}</div>
+                      ${doc ? `
+                        <div style="margin-top: 4px;">
+                          <button class="linked-ticket-chip" onclick="viewDoc('${doc.url}', '${doc.name}')">&#128206; ${doc.name}</button>
+                        </div>
+                      ` : ''}
+                    </div>
+                    <div class="event-edit-btns">
+                      <button class="btn-icon-sm" onclick="openEditEventModal(${dayIdx}, ${evIdx})" title="Edit">&#9998;</button>
+                      <button class="btn-icon-sm" onclick="deleteEvent(${dayIdx}, ${evIdx})" title="Delete" style="color: #f87171;">&#10005;</button>
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+
+            <div style="margin-top: 12px;">
+              <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">&#9997; Daily Notes</div>
+              <textarea class="notes-area" placeholder="Add notes for this day (packing, restaurant reservations, reminders)..." oninput="saveNote('${day.date}', this.value)">${savedNote}</textarea>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function saveNote(dateKey, textVal) {
+      localStorage.setItem('trip_note_' + dateKey, textVal);
+    }
+
+    // ==========================================
+    // AGENDA EDITING LOGIC
+    // ==========================================
+    function openAddEventModal(dayIdx) {
+      document.getElementById('eventDialogHeader').textContent = `Add Activity to ${tripDays[dayIdx].dayNum} (${tripDays[dayIdx].city})`;
+      document.getElementById('eventDayIndex').value = dayIdx;
+      document.getElementById('eventItemIndex').value = "-1";
+      document.getElementById('eventTimeInput').value = "";
+      document.getElementById('eventTitleInput').value = "";
+      document.getElementById('eventDescInput').value = "";
+
+      populateDocDropdown("");
+      document.getElementById('eventDialog').classList.add('open');
+    }
+
+    function openAddEventModalForDate(dateStr) {
+      const idx = tripDays.findIndex(d => d.date === dateStr);
+      if (idx !== -1) openAddEventModal(idx);
+    }
+
+    function openEditEventModal(dayIdx, eventIdx) {
+      const ev = tripDays[dayIdx].events[eventIdx];
+      document.getElementById('eventDialogHeader').textContent = `Edit Activity (${tripDays[dayIdx].dayNum})`;
+      document.getElementById('eventDayIndex').value = dayIdx;
+      document.getElementById('eventItemIndex').value = eventIdx;
+      document.getElementById('eventTimeInput').value = ev.time || "";
+      document.getElementById('eventTitleInput').value = ev.title || "";
+      document.getElementById('eventDescInput').value = ev.desc || "";
+
+      populateDocDropdown(ev.docId || "");
+      document.getElementById('eventDialog').classList.add('open');
+    }
+
+    function populateDocDropdown(selectedDocId) {
+      const select = document.getElementById('eventDocSelect');
+      select.innerHTML = '<option value="">-- No Linked Document --</option>' + tripDocs.map(doc => `
+        <option value="${doc.id}" ${doc.id === selectedDocId ? 'selected' : ''}>${doc.name}</option>
+      `).join('');
+    }
+
+    function closeEventDialog() {
+      document.getElementById('eventDialog').classList.remove('open');
+    }
+
+    function saveEventDialog() {
+      const dayIdx = parseInt(document.getElementById('eventDayIndex').value, 10);
+      const eventIdx = parseInt(document.getElementById('eventItemIndex').value, 10);
+      const timeVal = document.getElementById('eventTimeInput').value.trim() || "TBD";
+      const titleVal = document.getElementById('eventTitleInput').value.trim() || "Untitled Activity";
+      const descVal = document.getElementById('eventDescInput').value.trim() || "";
+      const docIdVal = document.getElementById('eventDocSelect').value;
+
+      let targetEventId;
+      if (eventIdx === -1) {
+        // Add new
+        targetEventId = "ev_" + dayIdx + "_" + Date.now();
+        tripDays[dayIdx].events.push({
+          id: targetEventId,
+          time: timeVal,
+          title: titleVal,
+          desc: descVal,
+          docId: docIdVal || undefined
+        });
+      } else {
+        // Edit existing
+        const ev = tripDays[dayIdx].events[eventIdx];
+        targetEventId = ev.id;
+        const oldDocId = ev.docId;
+        if (oldDocId && oldDocId !== docIdVal) {
+          const oldDoc = getDocById(oldDocId);
+          if (oldDoc && oldDoc.linkedEventId === targetEventId) {
+            oldDoc.linkedEventId = null;
+          }
+        }
+        ev.time = timeVal;
+        ev.title = titleVal;
+        ev.desc = descVal;
+        ev.docId = docIdVal || undefined;
+      }
+
+      // Bi-directional link from chosen doc to this event
+      if (docIdVal) {
+        const doc = getDocById(docIdVal);
+        if (doc) {
+          doc.linkedEventId = targetEventId;
+        }
+      }
+
+      saveState();
+      closeEventDialog();
+      renderTimeline();
+      renderTodayView(currentSimDate);
+      renderDocsList();
+    }
+
+    function deleteEvent(dayIdx, eventIdx) {
+      const ev = tripDays[dayIdx].events[eventIdx];
+      if (confirm(`Remove "${ev.title}" from ${tripDays[dayIdx].dayNum}?`)) {
+        // Clear any document linked to this deleted event
+        for (let d of tripDocs) {
+          if (d.linkedEventId === ev.id) {
+            d.linkedEventId = null;
+          }
+        }
+        tripDays[dayIdx].events.splice(eventIdx, 1);
+        saveState();
+        renderTimeline();
+        renderTodayView(currentSimDate);
+        renderDocsList();
+      }
+    }
+
+    function confirmResetItinerary() {
+      if (confirm("Reset the itinerary back to original defaults? Any custom added activities will be cleared.")) {
+        tripDays = JSON.parse(JSON.stringify(DEFAULT_TRIP_DAYS));
+        tripDocs = JSON.parse(JSON.stringify(DEFAULT_TRIP_DOCS));
+        saveState();
+        renderTimeline();
+        renderTodayView(currentSimDate);
+        renderDocsList();
+      }
+    }
+
+    // ==========================================
+    // DOCUMENT WALLET & LINKING LOGIC
+    // ==========================================
+    function renderDocsList() {
+      const container = document.getElementById('docsListContainer');
+      container.innerHTML = tripDocs.map((doc, idx) => {
+        let linkedLabel = "Wallet only (unlinked)";
+        if (doc.linkedEventId) {
+          const match = getEventById(doc.linkedEventId);
+          if (match) {
+            linkedLabel = `${match.day.dayNum}: ${match.event.title}`;
+          }
+        }
+
+        return `
+          <div class="doc-item">
+            <div class="doc-icon">${doc.icon || '&#128196;'}</div>
+            <div class="doc-meta">
+              <div class="doc-name">${doc.name}</div>
+              <div class="doc-sub">${doc.sub || 'Ticket Document'}</div>
+              <div class="doc-link-tag">&#128206; ${linkedLabel}</div>
+            </div>
+            <div class="doc-btns">
+              <button class="btn-doc" onclick="viewDoc('${doc.url}', '${doc.name}')">View</button>
+              <button class="btn-doc" onclick="openEditDocModal('${doc.id}')">&#9998; Link</button>
+              ${!doc.isBuiltIn ? `
+                <button class="btn-doc" style="color: #f87171; border-color: rgba(244,63,94,0.3);" onclick="deleteUserDoc('${doc.id}')">&#10005;</button>
+              ` : `
+                <a href="${doc.url}" download class="btn-doc">&#8595;</a>
+              `}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function populateEventLinkDropdown(selectedEventId) {
+      const select = document.getElementById('docLinkSelect');
+      let html = '<option value="">-- Do Not Link (Wallet Only) --</option>';
+      for (let day of tripDays) {
+        html += `<optgroup label="${day.dayNum}: ${day.city} (${day.dateStr})">`;
+        for (let ev of day.events) {
+          const isSelected = ev.id === selectedEventId ? 'selected' : '';
+          html += `<option value="${ev.id}" ${isSelected}>${day.dayNum} - ${ev.time}: ${ev.title}</option>`;
+        }
+        html += '</optgroup>';
+      }
+      select.innerHTML = html;
+    }
+
+    function startDocUploadFlow(input) {
+      const file = input.files[0];
+      if (!file) return;
+
+      const cleanName = file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const base64Data = e.target.result;
+        
+        document.getElementById('docDialogHeader').textContent = "Rename & Link New Ticket";
+        document.getElementById('docEditId').value = ""; // indicates new
+        document.getElementById('docPendingData').value = base64Data;
+        document.getElementById('docPendingType').value = file.type;
+        document.getElementById('docNameInput').value = cleanName;
+
+        populateEventLinkDropdown("");
+        document.getElementById('docDialog').classList.add('open');
+        input.value = '';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function openEditDocModal(docId) {
+      const doc = getDocById(docId);
+      if (!doc) return;
+
+      document.getElementById('docDialogHeader').textContent = "Rename & Link Ticket";
+      document.getElementById('docEditId').value = doc.id;
+      document.getElementById('docPendingData').value = "";
+      document.getElementById('docNameInput').value = doc.name;
+
+      populateEventLinkDropdown(doc.linkedEventId || "");
+      document.getElementById('docDialog').classList.add('open');
+    }
+
+    function closeDocDialog() {
+      document.getElementById('docDialog').classList.remove('open');
+    }
+
+    function saveDocDialog() {
+      const editId = document.getElementById('docEditId').value;
+      const nameVal = document.getElementById('docNameInput').value.trim() || "Untitled Document";
+      const linkedEventId = document.getElementById('docLinkSelect').value;
+
+      if (!editId) {
+        // Creating new uploaded doc
+        const newDocId = "doc_up_" + Date.now();
+        const base64Data = document.getElementById('docPendingData').value;
+        const newDoc = {
+          id: newDocId,
+          name: nameVal,
+          sub: "User Uploaded Ticket",
+          url: base64Data,
+          icon: "&#128206;",
+          linkedEventId: linkedEventId || null,
+          isBuiltIn: false
+        };
+        tripDocs.push(newDoc);
+
+        // Also associate event
+        if (linkedEventId) {
+          const match = getEventById(linkedEventId);
+          if (match) match.event.docId = newDocId;
+        }
+      } else {
+        // Editing existing doc
+        const doc = getDocById(editId);
+        if (doc) {
+          // Remove previous link if changed
+          if (doc.linkedEventId && doc.linkedEventId !== linkedEventId) {
+            const prevMatch = getEventById(doc.linkedEventId);
+            if (prevMatch && prevMatch.event.docId === doc.id) {
+              delete prevMatch.event.docId;
+            }
+          }
+
+          doc.name = nameVal;
+          doc.linkedEventId = linkedEventId || null;
+
+          // Set new event link
+          if (linkedEventId) {
+            const newMatch = getEventById(linkedEventId);
+            if (newMatch) newMatch.event.docId = doc.id;
+          }
+        }
+      }
+
+      saveState();
+      closeDocDialog();
+      renderDocsList();
+      renderTimeline();
+      renderTodayView(currentSimDate);
+    }
+
+    function deleteUserDoc(docId) {
+      const idx = tripDocs.findIndex(d => d.id === docId);
+      if (idx === -1) return;
+      if (confirm(`Delete "${tripDocs[idx].name}" from your wallet?`)) {
+        // Disassociate from events
+        for (let day of tripDays) {
+          for (let ev of day.events) {
+            if (ev.docId === docId) delete ev.docId;
+          }
+        }
+        tripDocs.splice(idx, 1);
+        saveState();
+        renderDocsList();
+        renderTimeline();
+        renderTodayView(currentSimDate);
+      }
+    }
+
+    // ==========================================
+    // MODAL VIEWER
+    // ==========================================
+    function viewDoc(docUrl, title) {
+      document.getElementById('modalDocTitle').textContent = title || 'Document';
+      document.getElementById('modalIframe').src = docUrl;
+      document.getElementById('docModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDocModal() {
+      document.getElementById('docModal').classList.remove('open');
+      document.getElementById('modalIframe').src = 'about:blank';
+      document.body.style.overflow = 'auto';
+    }
+
+    // ==========================================
+    // CHECKLIST
+    // ==========================================
+    function renderChecklist() {
+      const container = document.getElementById('checklistContainer');
+      container.innerHTML = CHECKLIST_ITEMS.map(item => {
+        const checked = localStorage.getItem('check_' + item.id) === 'true';
+        return `
+          <div class="checklist-row">
+            <input type="checkbox" id="${item.id}" ${checked ? 'checked' : ''} onchange="toggleCheck('${item.id}', this.checked)">
+            <div>
+              <label for="${item.id}" class="check-title" style="${checked ? 'text-decoration: line-through; opacity: 0.6;' : ''}">${item.title}</label>
+              <div class="check-desc">${item.desc}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleCheck(id, isChecked) {
+      localStorage.setItem('check_' + id, isChecked);
+      renderChecklist();
+    }
+
+    // ==========================================
+    // THEME TOGGLE
+    // ==========================================
+    function toggleTheme() {
+      document.body.classList.toggle('light-mode');
+      const isLight = document.body.classList.contains('light-mode');
+      localStorage.setItem('trip_theme', isLight ? 'light' : 'dark');
+    }
+
+    if (localStorage.getItem('trip_theme') === 'light') {
+      document.body.classList.add('light-mode');
+    }
+
+    window.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
