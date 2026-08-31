@@ -1,4 +1,4 @@
-const CACHE_NAME = 'london-scotland-v1';
+const CACHE_NAME = 'london-scotland-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

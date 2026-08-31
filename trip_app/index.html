@@ -358,6 +358,54 @@
     .linked-ticket-chip:active {
       background: rgba(0, 212, 255, 0.25);
     }
+    .event-chips-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .event-map-chip {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #38bdf8;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s ease;
+    }
+    .event-map-chip:active {
+      background: rgba(56, 189, 248, 0.28);
+    }
+    .day-route-btn {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.16) 0%, rgba(5, 150, 105, 0.26) 100%);
+      border: 1px solid rgba(16, 185, 129, 0.45);
+      color: #34d399;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 9px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      margin: 8px 0 12px;
+      width: 100%;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.12);
+      transition: transform 0.1s ease, filter 0.15s ease;
+    }
+    .day-route-btn:active {
+      transform: scale(0.98);
+      filter: brightness(1.1);
+    }
 
     .notes-area {
       width: 100%;
@@ -731,6 +779,7 @@
             <button class="btn-sm" onclick="openAddEventModalForDate(currentSimDate)">+ Add</button>
           </div>
         </div>
+        <div id="todayRouteBtnContainer"></div>
         <div id="todayEventsList">
           <!-- Populated dynamically via JS -->
         </div>
@@ -740,7 +789,10 @@
       <div class="card">
         <div style="font-size: 14px; font-weight: 700; margin-bottom: 10px; color: var(--accent-cyan);">&#127976; Active Accommodation &amp; Assistance</div>
         <div style="font-size: 14px; font-weight: 600; margin-bottom: 2px;" id="activeHotelName">Bournemouth Beachfront / Lower Gardens Area</div>
-        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;" id="activeHotelAddress">Bournemouth, Dorset, UK</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px;" id="activeHotelAddress">Bournemouth, Dorset, UK</div>
+        <div>
+          <a href="#" id="activeHotelMapBtn" class="event-map-chip" target="_blank" rel="noopener">&#128205; Open Hotel in Maps</a>
+        </div>
         
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px;">
           <a href="tel:999" class="btn-action" style="justify-content: center; color: #f87171; border-color: rgba(244,63,94,0.3); background: rgba(244,63,94,0.1);">&#128222; Emergency: 999</a>
@@ -894,6 +946,11 @@
     </div>
 
     <div class="form-group">
+      <label class="form-label">&#128205; Location / Place Name (Google Maps)</label>
+      <input type="text" id="eventLocationInput" class="form-input" placeholder="e.g. Edinburgh Castle, EH1 2NG or 105 St Michael's Rd">
+    </div>
+
+    <div class="form-group">
       <label class="form-label">Link Ticket / Booking Document</label>
       <select id="eventDocSelect" class="form-select">
         <option value="">-- No Linked Document --</option>
@@ -943,10 +1000,12 @@
         summary: "Departure from Kempegowda International Airport (BLR)",
         hotel: "In Transit",
         hotelAddress: "Emirates Flight EK 567",
+        travelMode: "transit",
+        routeUrl: "https://www.google.com/maps/search/?api=1&query=Kempegowda+International+Airport+Bengaluru",
         events: [
-          { id: "ev_0_1", time: "18:00", title: "Arrive at Bangalore Airport (BLR)", desc: "Bag drop and border clearance at Terminal 2.", docId: "doc_emirates" },
-          { id: "ev_0_2", time: "21:00", title: "Flight EK 567 Departs", desc: "Fly to Dubai (DXB). 3h 50m flight time.", docId: "doc_emirates" },
-          { id: "ev_0_3", time: "23:20", title: "Transit at Dubai (DXB) Terminal 3", desc: "Short layover (3h 25m) before connection to London.", docId: "doc_emirates" }
+          { id: "ev_0_1", time: "18:00", title: "Arrive at Bangalore Airport (BLR)", desc: "Bag drop and border clearance at Terminal 2.", location: "Kempegowda International Airport Terminal 2, Bengaluru", docId: "doc_emirates" },
+          { id: "ev_0_2", time: "21:00", title: "Flight EK 567 Departs", desc: "Fly to Dubai (DXB). 3h 50m flight time.", location: "Kempegowda International Airport, Bengaluru", docId: "doc_emirates" },
+          { id: "ev_0_3", time: "23:20", title: "Transit at Dubai (DXB) Terminal 3", desc: "Short layover (3h 25m) before connection to London.", location: "Dubai International Airport Terminal 3, Dubai", docId: "doc_emirates" }
         ]
       },
       {
@@ -958,12 +1017,14 @@
         summary: "Landing at London Gatwick, drive to Bournemouth, and seaside stroll",
         hotel: "Bournemouth Highcliff Marriott Hotel",
         hotelAddress: "105 St. Michael's Road, Bournemouth, BH2 5DU (t: +44 1202 557702)",
+        travelMode: "driving",
+        routeUrl: "https://www.google.com/maps/dir/?api=1&origin=London+Gatwick+Airport+North+Terminal&destination=Bournemouth+Highcliff+Marriott+Hotel,+105+St+Michael%27s+Rd,+Bournemouth+BH2+5DU&waypoints=Moto+Winchester+Services+M3%7CBournemouth+Pier+Approach&travelmode=driving&dir_action=navigate",
         events: [
-          { id: "ev_1_1", time: "07:20", title: "Flight EK 11 Lands at Gatwick (LGW)", desc: "Terminal N. Clear border control and retrieve checked bags.", docId: "doc_emirates" },
-          { id: "ev_1_2", time: "09:00", title: "Collect Rental Car & Drive to Bournemouth", desc: "100 miles via M23, M3, M27, A31. Optional stop at Winchester Services." },
-          { id: "ev_1_3", time: "12:00", title: "Hotel Luggage Drop & Lunch", desc: "Check in / drop bags at Bournemouth Highcliff Marriott (Ref: 5318742616), enjoy seaside lunch, and rest.", docId: "doc_hotel_bournemouth" },
-          { id: "ev_1_4", time: "16:30", title: "Bournemouth Lower Gardens & Pier Promenade", desc: "Level, paved walk through gardens down to the pier. Ride the land train and visit the Oceanarium." },
-          { id: "ev_1_5", time: "19:00", title: "Early Seaside Dinner", desc: "Casual dining near Pier Approach." }
+          { id: "ev_1_1", time: "07:20", title: "Flight EK 11 Lands at Gatwick (LGW)", desc: "Terminal N. Clear border control and retrieve checked bags.", location: "London Gatwick Airport North Terminal", docId: "doc_emirates" },
+          { id: "ev_1_2", time: "09:00", title: "Collect Rental Car & Drive to Bournemouth", desc: "100 miles via M23, M3, M27, A31. Optional stop at Winchester Services.", location: "Moto Winchester Services M3, Shroner Wood, Winchester, SO21 1PP" },
+          { id: "ev_1_3", time: "12:00", title: "Hotel Luggage Drop & Lunch", desc: "Check in / drop bags at Bournemouth Highcliff Marriott (Ref: 5318742616), enjoy seaside lunch, and rest.", location: "Bournemouth Highcliff Marriott Hotel, 105 St Michael's Rd, Bournemouth BH2 5DU", docId: "doc_hotel_bournemouth" },
+          { id: "ev_1_4", time: "16:30", title: "Bournemouth Lower Gardens & Pier Promenade", desc: "Level, paved walk through gardens down to the pier. Ride the land train and visit the Oceanarium.", location: "Bournemouth Pier, Pier Approach, Bournemouth BH2 5AA" },
+          { id: "ev_1_5", time: "19:00", title: "Early Seaside Dinner", desc: "Casual dining near Pier Approach.", location: "Pier Approach, Bournemouth BH2 5AA" }
         ]
       },
       {
@@ -975,11 +1036,13 @@
         summary: "Peppa Pig World at Paultons Park and wild ponies in the New Forest",
         hotel: "Bournemouth Highcliff Marriott Hotel",
         hotelAddress: "105 St. Michael's Road, Bournemouth, BH2 5DU (t: +44 1202 557702)",
+        travelMode: "driving",
+        routeUrl: "https://www.google.com/maps/dir/?api=1&origin=Bournemouth+Highcliff+Marriott+Hotel,+105+St+Michael%27s+Rd,+Bournemouth+BH2+5DU&destination=Bournemouth+Highcliff+Marriott+Hotel,+105+St+Michael%27s+Rd,+Bournemouth+BH2+5DU&waypoints=Paultons+Park+Home+of+Peppa+Pig+World,+Ower,+Romsey+SO51+6AL%7CLyndhurst,+New+Forest+National+Park&travelmode=driving&dir_action=navigate",
         events: [
-          { id: "ev_2_1", time: "09:15", title: "Drive to Paultons Park (Ower)", desc: "35 minutes along A31 for 10:00 gate opening." },
-          { id: "ev_2_2", time: "10:00", title: "Peppa Pig World (Confirmed Entry)", desc: "Ride Peppa's Big Balloon Ride, George's Dinosaur Adventure, and splash park (Ref: 642608160028).", docId: "doc_peppa_pig" },
-          { id: "ev_2_3", time: "15:00", title: "New Forest Ponies in Lyndhurst / Burley", desc: "See wild ponies and donkeys on village greens. Afternoon tea or ice cream." },
-          { id: "ev_2_4", time: "17:30", title: "Return to Bournemouth", desc: "30-minute drive back for dinner and restful evening." }
+          { id: "ev_2_1", time: "09:15", title: "Drive to Paultons Park (Ower)", desc: "35 minutes along A31 for 10:00 gate opening.", location: "Paultons Park Home of Peppa Pig World, Ower, Romsey SO51 6AL" },
+          { id: "ev_2_2", time: "10:00", title: "Peppa Pig World (Confirmed Entry)", desc: "Ride Peppa's Big Balloon Ride, George's Dinosaur Adventure, and splash park (Ref: 642608160028).", location: "Peppa Pig World, Paultons Park, Ower, Romsey SO51 6AL", docId: "doc_peppa_pig" },
+          { id: "ev_2_3", time: "15:00", title: "New Forest Ponies in Lyndhurst / Burley", desc: "See wild ponies and donkeys on village greens. Afternoon tea or ice cream.", location: "Lyndhurst, New Forest National Park, Hampshire SO43 7BE" },
+          { id: "ev_2_4", time: "17:30", title: "Return to Bournemouth", desc: "30-minute drive back for dinner and restful evening.", location: "Bournemouth Highcliff Marriott Hotel, 105 St Michael's Rd, Bournemouth BH2 5DU" }
         ]
       },
       {
@@ -991,12 +1054,14 @@
         summary: "Flight from Southampton to Edinburgh and Georgian Home check-in",
         hotel: "Georgian Home Airbnb (Hosted by David)",
         hotelAddress: "16 N St Andrew St, Edinburgh EH2 1HJ (t: +44 7730 530158)",
+        travelMode: "driving",
+        routeUrl: "https://www.google.com/maps/dir/?api=1&origin=Bournemouth+Highcliff+Marriott+Hotel,+105+St+Michael%27s+Rd,+Bournemouth+BH2+5DU&destination=Southampton+Airport,+Wide+Lane,+Southampton+SO18+2NL&waypoints=Sandbanks+Beach,+Banks+Rd,+Poole+BH13+7QQ&travelmode=driving&dir_action=navigate",
         events: [
-          { id: "ev_3_1", time: "10:00", title: "Hotel Checkout & Coastal Brunch", desc: "Breakfast at Marriott and coastal drive past Sandbanks." },
-          { id: "ev_3_2", time: "12:30", title: "Drive to Southampton Airport (SOU)", desc: "40 minutes. Return rental car directly outside terminal." },
-          { id: "ev_3_3", time: "15:00", title: "Flight BA 4106 to Edinburgh (EDI)", desc: "Loganair / British Airways flight. 1h 45m duration.", docId: "doc_ba_sou_edi" },
-          { id: "ev_3_4", time: "16:45", title: "Land at Edinburgh & Check-in at St Andrew St Airbnb", desc: "Take tram directly to St Andrew Square. Check-in after 16:00 (Code: HMHYPY2WBA).", docId: "doc_hotel_edinburgh" },
-          { id: "ev_3_5", time: "18:30", title: "Princes Street Gardens & Dinner", desc: "Evening walk beneath illuminated castle and dinner on George Street." }
+          { id: "ev_3_1", time: "10:00", title: "Hotel Checkout & Coastal Brunch", desc: "Breakfast at Marriott and coastal drive past Sandbanks.", location: "Sandbanks Beach, Banks Rd, Poole BH13 7QQ" },
+          { id: "ev_3_2", time: "12:30", title: "Drive to Southampton Airport (SOU)", desc: "40 minutes. Return rental car directly outside terminal.", location: "Southampton Airport, Wide Lane, Southampton SO18 2NL" },
+          { id: "ev_3_3", time: "15:00", title: "Flight BA 4106 to Edinburgh (EDI)", desc: "Loganair / British Airways flight. 1h 45m duration.", location: "Southampton Airport, Wide Lane, Southampton SO18 2NL", docId: "doc_ba_sou_edi" },
+          { id: "ev_3_4", time: "16:45", title: "Land at Edinburgh & Check-in at St Andrew St Airbnb", desc: "Take tram directly to St Andrew Square. Check-in after 16:00 (Code: HMHYPY2WBA).", location: "16 N St Andrew St, Edinburgh EH2 1HJ", docId: "doc_hotel_edinburgh" },
+          { id: "ev_3_5", time: "18:30", title: "Princes Street Gardens & Dinner", desc: "Evening walk beneath illuminated castle and dinner on George Street.", location: "Princes Street Gardens, Princes St, Edinburgh EH2 2HG" }
         ]
       },
       {
@@ -1008,13 +1073,15 @@
         summary: "Edinburgh Castle (12:00 PM), Dean Village, and Calton Hill views",
         hotel: "Georgian Home Airbnb (Hosted by David)",
         hotelAddress: "16 N St Andrew St, Edinburgh EH2 1HJ (t: +44 7730 530158)",
+        travelMode: "walking",
+        routeUrl: "https://www.google.com/maps/dir/?api=1&origin=16+N+St+Andrew+St,+Edinburgh+EH2+1HJ&destination=16+N+St+Andrew+St,+Edinburgh+EH2+1HJ&waypoints=Victoria+Street,+Edinburgh%7CEdinburgh+Castle%7C19+Grassmarket,+Edinburgh%7CDean+Village,+Edinburgh%7CCalton+Hill,+Edinburgh&travelmode=walking&dir_action=navigate",
         events: [
-          { id: "ev_4_1", time: "09:00", title: "Royal Mile & Victoria Street", desc: "Breakfast and photos along colorful Victoria Street. Playground at Princes Street Gardens." },
-          { id: "ev_4_2", time: "11:45", title: "Edinburgh Castle (Confirmed Entry: 12:00)", desc: "Crown Jewels, Great Hall, and the One O'Clock Gun fired at 13:00." },
-          { id: "ev_4_3", time: "13:30", title: "Grassmarket Lunch & Gelato", desc: "Lunch and gelato at Mary's Milk Bar." },
-          { id: "ev_4_4", time: "15:00", title: "Dean Village Riverside Walk", desc: "Peaceful walk along the Water of Leith through 19th-century milling village." },
-          { id: "ev_4_5", time: "17:00", title: "Calton Hill Sunset Views", desc: "Paved walk to National Monument with open views over city and Firth of Forth." },
-          { id: "ev_4_6", time: "19:00", title: "Dinner & Pack Bags", desc: "Dinner in New Town (Dishoom or Contini) and pack for Highlands road trip." }
+          { id: "ev_4_1", time: "09:00", title: "Royal Mile & Victoria Street", desc: "Breakfast and photos along colorful Victoria Street. Playground at Princes Street Gardens.", location: "Victoria Street, Edinburgh EH1 2HG" },
+          { id: "ev_4_2", time: "11:45", title: "Edinburgh Castle (Confirmed Entry: 12:00)", desc: "Crown Jewels, Great Hall, and the One O'Clock Gun fired at 13:00.", location: "Edinburgh Castle, Castlehill, Edinburgh EH1 2NG" },
+          { id: "ev_4_3", time: "13:30", title: "Grassmarket Lunch & Gelato", desc: "Lunch and gelato at Mary's Milk Bar.", location: "Mary's Milk Bar, 19 Grassmarket, Edinburgh EH1 2HS" },
+          { id: "ev_4_4", time: "15:00", title: "Dean Village Riverside Walk", desc: "Peaceful walk along the Water of Leith through 19th-century milling village.", location: "Dean Village, Edinburgh EH4 3AY" },
+          { id: "ev_4_5", time: "17:00", title: "Calton Hill Sunset Views", desc: "Paved walk to National Monument with open views over city and Firth of Forth.", location: "Calton Hill, Edinburgh EH7 5AA" },
+          { id: "ev_4_6", time: "19:00", title: "Dinner & Pack Bags", desc: "Dinner in New Town (Dishoom or Contini) and pack for Highlands road trip.", location: "George Street, Edinburgh EH2 2HT" }
         ]
       },
       {
@@ -1026,12 +1093,14 @@
         summary: "Doune Castle, Rannoch Moor, and Glencoe valley drive to Loch Lochy",
         hotel: "The Whispering Pine Lodge",
         hotelAddress: "Loch Lochy, Spean Bridge, Letterfinlay, PH34 4DZ",
+        travelMode: "driving",
+        routeUrl: "https://www.google.com/maps/dir/?api=1&origin=Arnold+Clark+Car+%26+Van+Rental,+Eastfield+Road,+Newbridge,+Edinburgh+EH28+8LS&destination=The+Whispering+Pine+Lodge,+Letterfinlay,+Spean+Bridge+PH34+4DZ&waypoints=Doune+Castle,+Castle+Road,+Doune%7CLoch+Lubnaig,+Callander%7CThe+Three+Sisters,+A82,+Glencoe&travelmode=driving&dir_action=navigate",
         events: [
-          { id: "ev_5_1", time: "10:00", title: "Collect Rental SUV at Edinburgh Airport (Arnold Clark)", desc: "Tram or taxi from hotel to airport. Shuttle from Coach Park Stop 8 to branch. Automatic SUV with toddler seat (Ref: 10851829). Head northwest on M9 towards Doune.", docId: "doc_arnold_clark" },
-          { id: "ev_5_2", time: "10:50", title: "Doune Castle Stop", desc: "Explore 14th-century fortress and River Teith trail (45 mins)." },
-          { id: "ev_5_3", time: "11:45", title: "Callander & Loch Lubnaig", desc: "Coffee stop in Callander and lakeside pause at Loch Lubnaig." },
-          { id: "ev_5_4", time: "13:30", title: "Glencoe Valley & Three Sisters", desc: "Pass Rannoch Moor. Viewpoint photos, lunch at visitor center, and turf house visit." },
-          { id: "ev_5_5", time: "16:00", title: "Check-in at The Whispering Pine Lodge", desc: "Arrive at hotel on Loch Lochy. Lochside dinner at lodge restaurant.", docId: "doc_whispering_pine" }
+          { id: "ev_5_1", time: "10:00", title: "Collect Rental SUV at Edinburgh Airport (Arnold Clark)", desc: "Tram or taxi from hotel to airport. Shuttle from Coach Park Stop 8 to branch. Automatic SUV with toddler seat (Ref: 10851829). Head northwest on M9 towards Doune.", location: "Arnold Clark Car & Van Rental, Eastfield Road, Newbridge, Edinburgh EH28 8LS", docId: "doc_arnold_clark" },
+          { id: "ev_5_2", time: "10:50", title: "Doune Castle Stop", desc: "Explore 14th-century fortress and River Teith trail (45 mins).", location: "Doune Castle, Castle Road, Doune FK16 6EA" },
+          { id: "ev_5_3", time: "11:45", title: "Callander & Loch Lubnaig", desc: "Coffee stop in Callander and lakeside pause at Loch Lubnaig.", location: "Loch Lubnaig, Callander FK17 8HN" },
+          { id: "ev_5_4", time: "13:30", title: "Glencoe Valley & Three Sisters", desc: "Pass Rannoch Moor. Viewpoint photos, lunch at visitor center, and turf house visit.", location: "The Three Sisters, A82, Ballachulish PH49 4HX" },
+          { id: "ev_5_5", time: "16:00", title: "Check-in at The Whispering Pine Lodge", desc: "Arrive at hotel on Loch Lochy. Lochside dinner at lodge restaurant.", location: "The Whispering Pine Lodge, Letterfinlay, Spean Bridge PH34 4DZ", docId: "doc_whispering_pine" }
         ]
       },
       {
@@ -1043,12 +1112,14 @@
         summary: "Glen Shiel, Eilean Donan Castle, and Moray Firth wild dolphin boat tour",
         hotel: "The Whispering Pine Lodge",
         hotelAddress: "Loch Lochy, Spean Bridge, Letterfinlay, PH34 4DZ",
+        travelMode: "driving",
+        routeUrl: "https://www.google.com/maps/dir/?api=1&origin=The+Whispering+Pine+Lodge,+Letterfinlay,+Spean+Bridge+PH34+4DZ&destination=The+Whispering+Pine+Lodge,+Letterfinlay,+Spean+Bridge+PH34+4DZ&waypoints=Glen+Shiel+Viewpoint,+A87%7CEilean+Donan+Castle,+Dornie%7CInverness+Marina,+Longman+Drive,+Inverness+IV1+1SU%7CFort+Augustus,+Inverness-shire&travelmode=driving&dir_action=navigate",
         events: [
-          { id: "ev_6_1", time: "09:15", title: "Scenic Glen Shiel Drive (A87)", desc: "Pass beneath Five Sisters of Kintail mountain peaks." },
-          { id: "ev_6_2", time: "10:15", title: "Eilean Donan Castle", desc: "Cross arched stone bridge to explore the lochside castle." },
-          { id: "ev_6_3", time: "11:30", title: "Drive to Inverness Marina", desc: "80 minutes northeast along A87 and A82. Lunch at marina cafe." },
-          { id: "ev_6_4", time: "14:00", title: "Dolphin Spirit Wildlife Cruise", desc: "75-minute cruise into sheltered Moray Firth to spot resident bottlenose dolphins." },
-          { id: "ev_6_5", time: "15:45", title: "Scenic Return Drive via Loch Ness", desc: "Follow Loch Ness past Urquhart Castle and Fort Augustus back to the lodge." }
+          { id: "ev_6_1", time: "09:15", title: "Scenic Glen Shiel Drive (A87)", desc: "Pass beneath Five Sisters of Kintail mountain peaks.", location: "Glen Shiel Viewpoint, A87, Kyle IV40 8HP" },
+          { id: "ev_6_2", time: "10:15", title: "Eilean Donan Castle", desc: "Cross arched stone bridge to explore the lochside castle.", location: "Eilean Donan Castle, Dornie, Kyle of Lochalsh IV40 8DX" },
+          { id: "ev_6_3", time: "11:30", title: "Drive to Inverness Marina", desc: "80 minutes northeast along A87 and A82. Lunch at marina cafe.", location: "Inverness Marina, Longman Drive, Inverness IV1 1SU" },
+          { id: "ev_6_4", time: "14:00", title: "Dolphin Spirit Wildlife Cruise", desc: "75-minute cruise into sheltered Moray Firth to spot resident bottlenose dolphins.", location: "Dolphin Spirit Inverness, Inverness Marina, Longman Dr, Inverness IV1 1SU" },
+          { id: "ev_6_5", time: "15:45", title: "Scenic Return Drive via Loch Ness", desc: "Follow Loch Ness past Urquhart Castle and Fort Augustus back to the lodge.", location: "Fort Augustus, Inverness-shire PH32 4AU" }
         ]
       },
       {
@@ -1060,12 +1131,14 @@
         summary: "Scenic Cairngorms drive, flight to London City Airport, and Waterloo hotel",
         hotel: "Park Plaza County Hall Hotel",
         hotelAddress: "1 Addington Street, Waterloo, London, SE1 7RY",
+        travelMode: "driving",
+        routeUrl: "https://www.google.com/maps/dir/?api=1&origin=The+Whispering+Pine+Lodge,+Letterfinlay,+Spean+Bridge+PH34+4DZ&destination=Arnold+Clark+Car+%26+Van+Rental,+Eastfield+Road,+Newbridge,+Edinburgh+EH28+8LS&waypoints=The+House+of+Bruar,+By+Blair+Atholl,+Pitlochry+PH18+5TW&travelmode=driving&dir_action=navigate",
         events: [
-          { id: "ev_7_1", time: "10:00", title: "Lodge Checkout & Cairngorms Drive", desc: "Drive east on A86 past Loch Laggan, joining A9 south." },
-          { id: "ev_7_2", time: "12:30", title: "Lunch Stop: Blair Castle or House of Bruar", desc: "Baronial castle gardens and play area, or food hall lunch." },
-          { id: "ev_7_3", time: "17:30", title: "Return Rental SUV at Arnold Clark (Edinburgh Airport)", desc: "Return car at Eastfield Road branch by 18:00. Take 3-minute shuttle to terminal for flight BA 8719.", docId: "doc_arnold_clark" },
-          { id: "ev_7_4", time: "20:10", title: "Flight BA 8719: EDI to London City (LCY)", desc: "Evening flight landing in London at 21:35.", docId: "doc_ba_edi_lcy" },
-          { id: "ev_7_5", time: "22:00", title: "Taxi to Park Plaza County Hall, Waterloo", desc: "Check in at 24-hour reception and rest.", docId: "doc_park_plaza" }
+          { id: "ev_7_1", time: "10:00", title: "Lodge Checkout & Cairngorms Drive", desc: "Drive east on A86 past Loch Laggan, joining A9 south.", location: "Loch Laggan Viewpoint, A86, Newtonmore" },
+          { id: "ev_7_2", time: "12:30", title: "Lunch Stop: Blair Castle or House of Bruar", desc: "Baronial castle gardens and play area, or food hall lunch.", location: "The House of Bruar, By Blair Atholl, Pitlochry PH18 5TW" },
+          { id: "ev_7_3", time: "17:30", title: "Return Rental SUV at Arnold Clark (Edinburgh Airport)", desc: "Return car at Eastfield Road branch by 18:00. Take 3-minute shuttle to terminal for flight BA 8719.", location: "Arnold Clark Car & Van Rental, Eastfield Road, Newbridge, Edinburgh EH28 8LS", docId: "doc_arnold_clark" },
+          { id: "ev_7_4", time: "20:10", title: "Flight BA 8719: EDI to London City (LCY)", desc: "Evening flight landing in London at 21:35.", location: "London City Airport, Hartmann Rd, London E16 2PX", docId: "doc_ba_edi_lcy" },
+          { id: "ev_7_5", time: "22:00", title: "Taxi to Park Plaza County Hall, Waterloo", desc: "Check in at 24-hour reception and rest.", location: "Park Plaza County Hall London, 1 Addington St, London SE1 7RY", docId: "doc_park_plaza" }
         ]
       },
       {
@@ -1077,13 +1150,15 @@
         summary: "Big Ben, Uber Boat along Thames, Sky Garden, and London Eye night lights",
         hotel: "Park Plaza County Hall Hotel",
         hotelAddress: "1 Addington Street, Waterloo, London, SE1 7RY",
+        travelMode: "walking",
+        routeUrl: "https://www.google.com/maps/dir/?api=1&origin=Park+Plaza+County+Hall+London,+1+Addington+St,+London+SE1+7RY&destination=Park+Plaza+County+Hall+London,+1+Addington+St,+London+SE1+7RY&waypoints=Westminster+Bridge,+London%7CTower+Bridge,+London%7CSky+Garden,+1+Sky+Garden+Walk,+London+EC3M+8AF%7CThe+London+Eye,+London&travelmode=walking&dir_action=navigate",
         events: [
-          { id: "ev_8_1", time: "09:30", title: "Westminster Bridge & Big Ben", desc: "Walk across bridge outside hotel to view Big Ben and Parliament." },
-          { id: "ev_8_2", time: "11:15", title: "Uber Boat River Cruise to Tower Pier", desc: "Board Thames Clipper catamaran from Westminster Pier to Tower Pier." },
-          { id: "ev_8_3", time: "12:15", title: "Tower Bridge & Lunch", desc: "Walk beside Tower Bridge and dine near St Katharine Docks." },
-          { id: "ev_8_4", time: "14:15", title: "Sky Garden Visit", desc: "35th-floor observation level with indoor gardens and city vistas." },
-          { id: "ev_8_5", time: "16:30", title: "Rest & Jubilee Gardens Playground", desc: "Play area next to the London Eye right outside hotel." },
-          { id: "ev_8_6", time: "18:30", title: "London Eye Evening Flight & South Bank Stroll", desc: "Night lights flight on the London Eye and riverfront dinner." }
+          { id: "ev_8_1", time: "09:30", title: "Westminster Bridge & Big Ben", desc: "Walk across bridge outside hotel to view Big Ben and Parliament.", location: "Westminster Bridge, London SW1A 2JH" },
+          { id: "ev_8_2", time: "11:15", title: "Uber Boat River Cruise to Tower Pier", desc: "Board Thames Clipper catamaran from Westminster Pier to Tower Pier.", location: "Westminster Millennium Pier, Victoria Embankment, London SW1A 2JH" },
+          { id: "ev_8_3", time: "12:15", title: "Tower Bridge & Lunch", desc: "Walk beside Tower Bridge and dine near St Katharine Docks.", location: "Tower Bridge, Tower Bridge Rd, London SE1 2UP" },
+          { id: "ev_8_4", time: "14:15", title: "Sky Garden Visit", desc: "35th-floor observation level with indoor gardens and city vistas.", location: "Sky Garden, 1 Sky Garden Walk, London EC3M 8AF" },
+          { id: "ev_8_5", time: "16:30", title: "Rest & Jubilee Gardens Playground", desc: "Play area next to the London Eye right outside hotel.", location: "Jubilee Gardens, Belvedere Rd, London SE1 7PG" },
+          { id: "ev_8_6", time: "18:30", title: "London Eye Evening Flight & South Bank Stroll", desc: "Night lights flight on the London Eye and riverfront dinner.", location: "The London Eye, Riverside Building, County Hall, London SE1 7PB" }
         ]
       },
       {
@@ -1095,11 +1170,13 @@
         summary: "Buckingham Palace, St James's Park pelicans, and evening with friends",
         hotel: "Park Plaza County Hall Hotel",
         hotelAddress: "1 Addington Street, Waterloo, London, SE1 7RY",
+        travelMode: "walking",
+        routeUrl: "https://www.google.com/maps/dir/?api=1&origin=Park+Plaza+County+Hall+London,+1+Addington+St,+London+SE1+7RY&destination=Park+Plaza+County+Hall+London,+1+Addington+St,+London+SE1+7RY&waypoints=St+James%27s+Park,+London%7CBuckingham+Palace,+London+SW1A+1AA%7CLondon+Transport+Museum,+Covent+Garden&travelmode=walking&dir_action=navigate",
         events: [
-          { id: "ev_9_1", time: "09:30", title: "Buckingham Palace & St James's Park", desc: "Stroll royal parks to see palace gates, pelicans, and ducks." },
-          { id: "ev_9_2", time: "12:30", title: "Covent Garden & Transport Museum", desc: "Pedestrian piazza with street performers and historic vehicles." },
-          { id: "ev_9_3", time: "16:00", title: "Hotel Rest & Refresh", desc: "Quiet break before evening social gathering." },
-          { id: "ev_9_4", time: "18:00", title: "Catch-up with Friends for Dinner", desc: "Dinner and drinks with friends in central London." }
+          { id: "ev_9_1", time: "09:30", title: "Buckingham Palace & St James's Park", desc: "Stroll royal parks to see palace gates, pelicans, and ducks.", location: "Buckingham Palace, London SW1A 1AA" },
+          { id: "ev_9_2", time: "12:30", title: "Covent Garden & Transport Museum", desc: "Pedestrian piazza with street performers and historic vehicles.", location: "London Transport Museum, Covent Garden, London WC2E 7BB" },
+          { id: "ev_9_3", time: "16:00", title: "Hotel Rest & Refresh", desc: "Quiet break before evening social gathering.", location: "Park Plaza County Hall London, 1 Addington St, London SE1 7RY" },
+          { id: "ev_9_4", time: "18:00", title: "Catch-up with Friends for Dinner", desc: "Dinner and drinks with friends in central London.", location: "Covent Garden Piazza, London WC2E 8HB" }
         ]
       },
       {
@@ -1111,12 +1188,14 @@
         summary: "Hotel checkout, transfer to Gatwick Terminal N, and Emirates flight home",
         hotel: "In Transit",
         hotelAddress: "Flight EK 16 to Dubai & Bangalore",
+        travelMode: "transit",
+        routeUrl: "https://www.google.com/maps/dir/?api=1&origin=Park+Plaza+County+Hall+London,+1+Addington+St,+London+SE1+7RY&destination=London+Gatwick+Airport+North+Terminal,+West+Sussex&waypoints=London+Bridge+Station,+London&travelmode=transit&dir_action=navigate",
         events: [
-          { id: "ev_10_1", time: "08:30", title: "Breakfast & Hotel Checkout", desc: "Breakfast at Park Plaza County Hall and pack bags." },
-          { id: "ev_10_2", time: "10:30", title: "Transfer to Gatwick Airport (LGW) Terminal N", desc: "Direct taxi (75m) or Thameslink train from London Bridge (30m)." },
-          { id: "ev_10_3", time: "11:45", title: "Emirates Bag Drop & Security", desc: "Drop luggage at Terminal N for flight EK 16.", docId: "doc_emirates" },
-          { id: "ev_10_4", time: "14:35", title: "Flight EK 16 Departs to Dubai", desc: "7h 10m flight. Arrives Dubai 00:45 Monday, Sep 21.", docId: "doc_emirates" },
-          { id: "ev_10_5", time: "Mon 08:50", title: "Arrive Bangalore (BLR)", desc: "Connection on EK 564 landing in Bangalore at 08:50 AM.", docId: "doc_emirates" }
+          { id: "ev_10_1", time: "08:30", title: "Breakfast & Hotel Checkout", desc: "Breakfast at Park Plaza County Hall and pack bags.", location: "Park Plaza County Hall London, 1 Addington St, London SE1 7RY" },
+          { id: "ev_10_2", time: "10:30", title: "Transfer to Gatwick Airport (LGW) Terminal N", desc: "Direct taxi (75m) or Thameslink train from London Bridge (30m).", location: "London Bridge Station, London SE1 9SP" },
+          { id: "ev_10_3", time: "11:45", title: "Emirates Bag Drop & Security", desc: "Drop luggage at Terminal N for flight EK 16.", location: "London Gatwick Airport North Terminal, West Sussex", docId: "doc_emirates" },
+          { id: "ev_10_4", time: "14:35", title: "Flight EK 16 Departs to Dubai", desc: "7h 10m flight. Arrives Dubai 00:45 Monday, Sep 21.", location: "London Gatwick Airport North Terminal", docId: "doc_emirates" },
+          { id: "ev_10_5", time: "Mon 08:50", title: "Arrive Bangalore (BLR)", desc: "Connection on EK 564 landing in Bangalore at 08:50 AM.", location: "Kempegowda International Airport, Bengaluru", docId: "doc_emirates" }
         ]
       }
     ];
@@ -1273,6 +1352,25 @@
         }
       });
 
+      // Merge locations, travelMode, and routeUrl from DEFAULT_TRIP_DAYS into tripDays
+      DEFAULT_TRIP_DAYS.forEach((defDay, dIdx) => {
+        if (tripDays[dIdx]) {
+          if (!tripDays[dIdx].routeUrl || tripDays[dIdx].routeUrl !== defDay.routeUrl) {
+            tripDays[dIdx].routeUrl = defDay.routeUrl;
+          }
+          if (!tripDays[dIdx].travelMode) {
+            tripDays[dIdx].travelMode = defDay.travelMode;
+          }
+          defDay.events.forEach((defEv, eIdx) => {
+            if (tripDays[dIdx].events[eIdx] && tripDays[dIdx].events[eIdx].id === defEv.id) {
+              if (defEv.location && !tripDays[dIdx].events[eIdx].location) {
+                tripDays[dIdx].events[eIdx].location = defEv.location;
+              }
+            }
+          });
+        }
+      });
+
       // Mark confirmed checklist items as completed
       localStorage.setItem('check_c2', 'true');
       localStorage.setItem('check_c3', 'true');
@@ -1339,6 +1437,34 @@
       return null;
     }
 
+    function getEventMapUrl(ev, day) {
+      const q = ev.location || (ev.title + ', ' + day.city);
+      return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q);
+    }
+
+    function getDayRouteUrl(day) {
+      if (day.routeUrl) return day.routeUrl;
+      const validLocations = day.events
+        .map(e => e.location || (e.title + ', ' + day.city))
+        .filter(loc => loc && !loc.includes('Flight') && !loc.includes('Transit') && !loc.includes('Pack'));
+      if (validLocations.length === 0) {
+        return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(day.city);
+      }
+      if (validLocations.length === 1) {
+        return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(validLocations[0]);
+      }
+      const origin = validLocations[0];
+      const destination = validLocations[validLocations.length - 1];
+      const waypoints = validLocations.slice(1, -1);
+      const mode = day.travelMode || 'driving';
+      let url = 'https://www.google.com/maps/dir/?api=1&origin=' + encodeURIComponent(origin) + '&destination=' + encodeURIComponent(destination);
+      if (waypoints.length > 0) {
+        url += '&waypoints=' + waypoints.map(encodeURIComponent).join('%7C');
+      }
+      url += '&travelmode=' + mode + '&dir_action=navigate';
+      return url;
+    }
+
     function renderTodayView(targetDate) {
       const dayData = tripDays.find(d => d.date === targetDate) || tripDays[1];
 
@@ -1348,6 +1474,11 @@
       document.getElementById('todayCityBadge').className = "badge " + dayData.badge;
       document.getElementById('activeHotelName').textContent = dayData.hotel;
       document.getElementById('activeHotelAddress').textContent = dayData.hotelAddress;
+
+      const hotelMapBtn = document.getElementById('activeHotelMapBtn');
+      if (hotelMapBtn) {
+        hotelMapBtn.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(dayData.hotel + ' ' + dayData.hotelAddress);
+      }
 
       // Next Up Event
       if (dayData.events.length > 0) {
@@ -1366,15 +1497,22 @@
         } else {
           nextDocBtn.style.display = 'none';
         }
+
+        const mapQuery = nextEvt.location || (nextEvt.title + ' ' + dayData.city);
+        document.getElementById('nextEventMapBtn').href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(mapQuery);
       } else {
         document.getElementById('nextEventTitle').textContent = 'Free Day / No Scheduled Activities';
         document.getElementById('nextEventDetails').textContent = 'Relax or tap "+ Add" above to plan a new activity.';
         document.getElementById('nextEventCountdown').textContent = 'Relax';
         document.getElementById('nextEventDocBtn').style.display = 'none';
+        document.getElementById('nextEventMapBtn').href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(dayData.city);
       }
 
-      const mapQuery = encodeURIComponent(dayData.city + " " + dayData.hotelAddress);
-      document.getElementById('nextEventMapBtn').href = "https://maps.google.com/?q=" + mapQuery;
+      // Day Route Button in Today View
+      const routeContainer = document.getElementById('todayRouteBtnContainer');
+      if (routeContainer) {
+        routeContainer.innerHTML = '<a class="day-route-btn" href="' + getDayRouteUrl(dayData) + '" target="_blank" rel="noopener">&#128506;&#65039; Start Today\'s Route in Google Maps (' + dayData.events.length + ' Stops)</a>';
+      }
 
       // Events list
       const container = document.getElementById('todayEventsList');
@@ -1386,6 +1524,8 @@
       const dayIdx = tripDays.indexOf(dayData);
       container.innerHTML = dayData.events.map((ev, evIdx) => {
         const doc = ev.docId ? getDocById(ev.docId) : null;
+        const mapUrl = getEventMapUrl(ev, dayData);
+        const placeName = ev.location ? ev.location.split(',')[0].trim() : 'Maps';
         return `
           <div class="event-row">
             <div class="event-time">${ev.time}</div>
@@ -1394,11 +1534,10 @@
                 <span>${ev.title}</span>
               </div>
               <div class="event-desc">${ev.desc}</div>
-              ${doc ? `
-                <div style="margin-top: 4px;">
-                  <button class="linked-ticket-chip" onclick="viewDoc('${doc.url}', '${doc.name}')">&#128206; ${doc.name}</button>
-                </div>
-              ` : ''}
+              <div class="event-chips-row">
+                ${doc ? `<button class="linked-ticket-chip" onclick="viewDoc('${doc.url}', '${doc.name}')">&#128206; ${doc.name}</button>` : ''}
+                <a class="event-map-chip" href="${mapUrl}" target="_blank" rel="noopener">&#128205; ${placeName}</a>
+              </div>
             </div>
             <div class="event-edit-btns">
               <button class="btn-icon-sm" onclick="openEditEventModal(${dayIdx}, ${evIdx})" title="Edit">&#9998;</button>
@@ -1422,6 +1561,7 @@
       const container = document.getElementById('allDaysContainer');
       container.innerHTML = tripDays.map((day, dayIdx) => {
         const savedNote = localStorage.getItem('trip_note_' + day.date) || '';
+        const dayRouteUrl = getDayRouteUrl(day);
         return `
           <div class="card" id="card-${day.date}">
             <div class="day-card-header">
@@ -1434,12 +1574,16 @@
                 <button class="btn-sm" onclick="openAddEventModal(${dayIdx})">+ Add</button>
               </div>
             </div>
-            <div style="font-size: 13px; font-weight: 600; color: #38bdf8; margin-bottom: 10px;">${day.summary}</div>
+            <div style="font-size: 13px; font-weight: 600; color: #38bdf8; margin-bottom: 8px;">${day.summary}</div>
             
+            <a class="day-route-btn" href="${dayRouteUrl}" target="_blank" rel="noopener">&#128506;&#65039; Open Day Route in Google Maps (${day.events.length} Stops)</a>
+
             <div style="border-top: 1px solid var(--border-dark); padding-top: 6px;">
               ${day.events.length === 0 ? '<div style="font-size: 12px; color: var(--text-muted); padding: 8px 0;">No activities yet. Tap "+ Add" to add to this day.</div>' : ''}
               ${day.events.map((ev, evIdx) => {
                 const doc = ev.docId ? getDocById(ev.docId) : null;
+                const mapUrl = getEventMapUrl(ev, day);
+                const placeName = ev.location ? ev.location.split(',')[0].trim() : 'Maps';
                 return `
                   <div class="event-row">
                     <div class="event-time">${ev.time}</div>
@@ -1448,11 +1592,10 @@
                         <span>${ev.title}</span>
                       </div>
                       <div class="event-desc">${ev.desc}</div>
-                      ${doc ? `
-                        <div style="margin-top: 4px;">
-                          <button class="linked-ticket-chip" onclick="viewDoc('${doc.url}', '${doc.name}')">&#128206; ${doc.name}</button>
-                        </div>
-                      ` : ''}
+                      <div class="event-chips-row">
+                        ${doc ? `<button class="linked-ticket-chip" onclick="viewDoc('${doc.url}', '${doc.name}')">&#128206; ${doc.name}</button>` : ''}
+                        <a class="event-map-chip" href="${mapUrl}" target="_blank" rel="noopener">&#128205; ${placeName}</a>
+                      </div>
                     </div>
                     <div class="event-edit-btns">
                       <button class="btn-icon-sm" onclick="openEditEventModal(${dayIdx}, ${evIdx})" title="Edit">&#9998;</button>
@@ -1486,6 +1629,7 @@
       document.getElementById('eventTimeInput').value = "";
       document.getElementById('eventTitleInput').value = "";
       document.getElementById('eventDescInput').value = "";
+      document.getElementById('eventLocationInput').value = "";
 
       populateDocDropdown("");
       document.getElementById('eventDialog').classList.add('open');
@@ -1504,6 +1648,7 @@
       document.getElementById('eventTimeInput').value = ev.time || "";
       document.getElementById('eventTitleInput').value = ev.title || "";
       document.getElementById('eventDescInput').value = ev.desc || "";
+      document.getElementById('eventLocationInput').value = ev.location || "";
 
       populateDocDropdown(ev.docId || "");
       document.getElementById('eventDialog').classList.add('open');
@@ -1526,6 +1671,7 @@
       const timeVal = document.getElementById('eventTimeInput').value.trim() || "TBD";
       const titleVal = document.getElementById('eventTitleInput').value.trim() || "Untitled Activity";
       const descVal = document.getElementById('eventDescInput').value.trim() || "";
+      const locVal = document.getElementById('eventLocationInput').value.trim();
       const docIdVal = document.getElementById('eventDocSelect').value;
 
       let targetEventId;
@@ -1537,6 +1683,7 @@
           time: timeVal,
           title: titleVal,
           desc: descVal,
+          location: locVal || undefined,
           docId: docIdVal || undefined
         });
       } else {
@@ -1553,6 +1700,7 @@
         ev.time = timeVal;
         ev.title = titleVal;
         ev.desc = descVal;
+        ev.location = locVal || undefined;
         ev.docId = docIdVal || undefined;
       }
 
